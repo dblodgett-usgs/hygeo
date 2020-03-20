@@ -1,0 +1,15 @@
+Package: hygeo
+Type: Package
+Title: Hydrologic Geospatial Fabric Creation Functions
+Version: 0.1.0
+Authors@R: c(person(given = "David", 
+                    family = "Blodgett", 
+                    role = c("aut", "cre"), 
+                    email = "dblodgett@usgs.gov"))
+Description: Generates inputs for the ngen project
+Imports: dplyr, sf, magrittr
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr
