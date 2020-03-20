@@ -6,8 +6,9 @@ Authors@R: c(person(given = "David",
                     family = "Blodgett", 
                     role = c("aut", "cre"), 
                     email = "dblodgett@usgs.gov"))
-Description: Generates inputs for the ngen project
+Description: hygeo generates inputs for the NOAA-OWP ngen project.
 Imports: dplyr, sf, magrittr
+Suggests: knitr, testthat, nhdplusTools
 License: CC0
 Encoding: UTF-8
 LazyData: true

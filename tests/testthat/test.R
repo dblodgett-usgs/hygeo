@@ -1,8 +1,8 @@
-test_that("all functions run", {
-  library(nhdplusTools)
-  library(dplyr)
-  library(sf)
+library(nhdplusTools)
+library(dplyr)
+library(sf)
 
+test_that("all functions run", {
   sample_data <- system.file("gpkg/nhdplus_subset.gpkg", package = "hygeo")
 
   #st_layers("nhdplus_subset.gpkg")
