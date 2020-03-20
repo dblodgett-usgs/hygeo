@@ -8,7 +8,8 @@ This R package is part of the Next Generation Water Modeling Engine and Framewor
 
 ## Hydrologic and Hydrodynamic Graphs:
 
-![Example Image](https://github.com/NOAA-OWP/ngen/blob/master/data/demo.png) 
+![Example Image](https://github.com/NOAA-OWP/ngen/blob/master/data/demo.png?raw=true)  
+
 At the top level we have a hydrologic graph of catchments and nexuses and a hydrodynamic graph of waterbodies that “pins” to the catchment graph at nexuses. 
 
 I think it would be wise to model both catchments and nexuses as labeled nodes with unlabeled directed edges between. 
