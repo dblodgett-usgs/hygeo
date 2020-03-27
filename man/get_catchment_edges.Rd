@@ -4,8 +4,11 @@
 \alias{get_catchment_edges}
 \title{get catchment edges}
 \usage{
-get_catchment_edges(fline, nexus_prefix = "nexus",
-  catchment_prefix = "catchment")
+get_catchment_edges(
+  fline,
+  nexus_prefix = "nexus_",
+  catchment_prefix = "catchment_"
+)
 }
 \arguments{
 \item{fline}{sf data.frame NHDPlus Flowlines}

@@ -4,8 +4,11 @@
 \alias{get_waterbody_edge_list}
 \title{get waterbody edge list}
 \usage{
-get_waterbody_edge_list(catchment_edge_list,
-  catchment_prefix = "catchment", waterbody_prefix = "waterbody")
+get_waterbody_edge_list(
+  catchment_edge_list,
+  catchment_prefix = "catchment_",
+  waterbody_prefix = "waterbody_"
+)
 }
 \arguments{
 \item{catchment_edge_list}{data.frame as returned by get_catchment_edges}

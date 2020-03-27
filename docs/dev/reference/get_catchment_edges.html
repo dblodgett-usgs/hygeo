@@ -89,7 +89,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/dblodgett-usgs/hygeo">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -104,7 +109,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>get catchment edges</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/dblodgett-usgs/hygeo/blob/master/R/functions.R'><code>R/functions.R</code></a></small>
     <div class="hidden name"><code>get_catchment_edges.Rd</code></div>
     </div>
 
@@ -112,8 +117,11 @@
     <p>get catchment edges</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_catchment_edges</span>(<span class='no'>fline</span>, <span class='kw'>nexus_prefix</span> <span class='kw'>=</span> <span class='st'>"nexus"</span>,
-  <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment"</span>)</pre>
+    <pre class="usage"><span class='fu'>get_catchment_edges</span>(
+  <span class='no'>fline</span>,
+  <span class='kw'>nexus_prefix</span> <span class='kw'>=</span> <span class='st'>"nexus_"</span>,
+  <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment_"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

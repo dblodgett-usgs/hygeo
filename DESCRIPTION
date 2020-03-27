@@ -7,10 +7,12 @@ Authors@R: c(person(given = "David",
                     role = c("aut", "cre"), 
                     email = "dblodgett@usgs.gov"))
 Description: hygeo generates inputs for the Next Generation Water Modeling Engine and Framework Prototype project project.
+URL: https://github.com/dblodgett-usgs/hygeo
+BugReports: https://github.com/dblodgett-usgs/hygeo/issues
 Imports: dplyr, sf, magrittr
 Suggests: knitr, testthat, nhdplusTools, hyRefactor, jsonlite
 License: CC0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr

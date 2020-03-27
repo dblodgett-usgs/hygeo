@@ -59,16 +59,16 @@ plot(st_transform(st_geometry(nexus), 3857), add = TRUE)
 
 Given the flowlines, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowlines in this case. Waterbodies are 1:1 with catchments in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.
 
-```{r create_output}
-catchment_edge_list <- get_catchment_edges(fline)
+```{r create_output, echo=TRUE, eval=TRUE}
+(catchment_edge_list <- get_catchment_edges(fline))
 
-waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list)
+(waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list))
 
-catchment_data <- get_catchment_data(catchment)
+(catchment_data <- get_catchment_data(catchment, catchment_edge_list))
 
-waterbody_data <- get_waterbody_data(fline)
+(waterbody_data <- get_waterbody_data(fline, waterbody_edge_list))
 
-nexus_data <- get_nexus_data(nexus)
+(nexus_data <- get_nexus_data(nexus, catchment_edge_list, waterbody_edge_list))
 ```
 
 The outputs can be rendered into csv or json:

@@ -4,10 +4,17 @@
 \alias{get_catchment_data}
 \title{get catchment data}
 \usage{
-get_catchment_data(catchment, catchment_prefix = "catchment")
+get_catchment_data(
+  catchment,
+  catchment_edge_list,
+  catchment_prefix = "catchment_"
+)
 }
 \arguments{
 \item{catchment}{sf data.frame NHDPlus Catchments}
+
+\item{catchment_edge_list}{data.frame edge list of connections
+to/from catchments}
 
 \item{catchment_prefix}{character prefix for catchment IDs}
 }

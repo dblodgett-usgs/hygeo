@@ -4,10 +4,13 @@
 \alias{get_waterbody_data}
 \title{get_waterbody_data}
 \usage{
-get_waterbody_data(fline, waterbody_prefix = "waterbody")
+get_waterbody_data(fline, waterbody_edge_list, waterbody_prefix = "waterbody_")
 }
 \arguments{
 \item{fline}{sf data.frame NHDPlus Flowlines}
+
+\item{waterbody_edge_list}{data.frame edge list of connections
+to/from waterbodies}
 
 \item{waterbody_prefix}{character prefix for waterbody IDs}
 }

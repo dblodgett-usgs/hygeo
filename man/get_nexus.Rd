@@ -4,10 +4,12 @@
 \alias{get_nexus}
 \title{get nexuses}
 \usage{
-get_nexus(fline)
+get_nexus(fline, nexus_prefix = "nexus_")
 }
 \arguments{
 \item{fline}{sf data.frame NHDPlus Flowlines}
+
+\item{nexus_prefix}{character prefix for nexus IDs}
 }
 \description{
 get nexuses

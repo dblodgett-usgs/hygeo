@@ -4,10 +4,16 @@
 \alias{get_nexus_data}
 \title{get nexus data}
 \usage{
-get_nexus_data(nexus)
+get_nexus_data(nexus, catchment_edge_list, waterbody_edge_list)
 }
 \arguments{
 \item{nexus}{data.frame as returned by get_nexus}
+
+\item{catchment_edge_list}{data.frame edge list of connections
+to/from catchments}
+
+\item{waterbody_edge_list}{data.frame edge list of connections
+to/from waterbodies}
 }
 \description{
 get nexus data

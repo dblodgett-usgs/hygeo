@@ -89,7 +89,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/dblodgett-usgs/hygeo">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -104,7 +109,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>get catchment data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/dblodgett-usgs/hygeo/blob/master/R/functions.R'><code>R/functions.R</code></a></small>
     <div class="hidden name"><code>get_catchment_data.Rd</code></div>
     </div>
 
@@ -112,7 +117,11 @@
     <p>get catchment data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_catchment_data</span>(<span class='no'>catchment</span>, <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment"</span>)</pre>
+    <pre class="usage"><span class='fu'>get_catchment_data</span>(
+  <span class='no'>catchment</span>,
+  <span class='no'>catchment_edge_list</span>,
+  <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment_"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -120,6 +129,11 @@
     <tr>
       <th>catchment</th>
       <td><p>sf data.frame NHDPlus Catchments</p></td>
+    </tr>
+    <tr>
+      <th>catchment_edge_list</th>
+      <td><p>data.frame edge list of connections
+to/from catchments</p></td>
     </tr>
     <tr>
       <th>catchment_prefix</th>
