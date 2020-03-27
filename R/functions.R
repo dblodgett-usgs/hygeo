@@ -16,7 +16,7 @@ get_nexus <- function(fline) {
     select(.data$X, .data$Y) %>%
     st_as_sf(coords = c("X", "Y"), crs = st_crs(fline))
 
-  nexus$ID <- fline$COMID
+  nexus$ID <- fline$ToNode
 
   return(nexus)
 }
