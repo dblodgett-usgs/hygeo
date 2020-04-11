@@ -1,0 +1,85 @@
+---
+title: "Application of hygeo"
+author: "dblodgett@usgs.gov"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{nhdplusTools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(nhdplusTools)
+library(hyRefactor)
+library(sf)
+library(tidyr)
+library(dplyr)
+
+src_gpkg <- system.file("gpkg/sugar_creek_fort_mill.gpkg", package = "hygeo")
+fdr_tif <- system.file("tiff/sugar_creek_fort_mill_fdr.tif", package = "hygeo")
+fac_tif <- system.file("tiff/sugar_creek_fort_mill_fac.tif", package = "hygeo")
+collapsed <- tempfile(fileext = ".gpkg")
+collapsed_small <- tempfile(fileext = ".gpkg")
+reconciled <- tempfile(fileext = ".gpkg")
+reconciled_small <- tempfile(fileext = ".gpkg")
+
+unlink(c(collapsed, collapsed_small, reconciled, reconciled_small), force = TRUE)
+
+nhd <- nhdplusTools::plot_nhdplus(list(9731454),
+                                  gpkg = src_gpkg,
+                                  overwrite = FALSE,
+                                  nhdplus_data = src_gpkg,
+                                  actually_plot = FALSE)
+
+hyRefactor::refactor_nhdplus(nhd$flowline,
+                             split_flines_meters = 10000,
+                             split_flines_cores = 10000,
+                             collapse_flines_meters = 1000,
+                             collapse_flines_main_meters = 1000,
+                             out_collapsed = collapsed,
+                             out_reconciled = reconciled,
+                             three_pass = TRUE,
+                             purge_non_dendritic = FALSE)
+
+collapse <- sf::read_sf(collapsed)
+reconcile <- sf::read_sf(reconciled)
+
+fdr <- raster::raster(fdr_tif)
+fac <- raster::raster(fac_tif)
+
+crs <- raster::crs(fdr)
+
+nhd$catchment <- sf::st_transform(nhd$catchment, crs)
+reconcile <- sf::st_transform(sf::st_sf(reconcile), crs)
+collapse <- sf::st_transform(sf::st_sf(collapse), crs)
+
+sf::st_precision(nhd$catchment) <- 30
+
+reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
+                                                             fdr = fdr,
+                                                             fac = fac,
+                                                             fline_ref = collapse,
+                                                             fline_rec = reconcile,
+                                                             para = 1)
+
+outlet_comids <- select(st_drop_geometry(reconcile), ID, member_COMID) %>%
+  mutate(member_COMID = strsplit(member_COMID, ",")) %>%
+  unnest(cols = member_COMID) %>%
+  mutate(member_COMID = as.integer(member_COMID)) %>%
+  left_join(select(st_drop_geometry(nhd$flowline), COMID, Hydroseq),
+            by = c("member_COMID" = "COMID")) %>%
+  group_by(ID) %>%
+  filter(Hydroseq == min(Hydroseq)) %>%
+  ungroup()
+
+hyRefactor::refactor_nhdplus(nhd$flowline,
+                             split_flines_meters = 500,
+                             split_flines_cores = 2,
+                             collapse_flines_meters = 400,
+                             collapse_flines_main_meters = 400,
+                             exclude_cats = outlet_comids$member_COMID,
+                             out_collapsed = collapsed_small,
+                             out_reconciled = reconciled_small,
+                             three_pass = TRUE,
+                             purge_non_dendritic = FALSE)
+```
