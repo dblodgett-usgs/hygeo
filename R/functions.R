@@ -5,7 +5,7 @@
 #' @param nexus_prefix character prefix for nexus IDs
 #' @importFrom sf st_coordinates st_as_sf st_crs
 #' @importFrom magrittr %>%
-#' @importFrom dplyr group_by filter ungroup select n row_number
+#' @importFrom dplyr group_by filter ungroup select n row_number rename
 #' @export
 get_nexus <- function(fline, nexus_prefix = "nexus_") {
   nexus <- fline %>%
@@ -13,9 +13,9 @@ get_nexus <- function(fline, nexus_prefix = "nexus_") {
     as.data.frame()
 
   if("L2" %in% names(nexus)) {
-    nexus <- rename(nexus, GG = L2)
+    nexus <- rename(nexus, GG = .data$L2)
   } else {
-    nexus <- rename(nexus, GG = L1)
+    nexus <- rename(nexus, GG = .data$L1)
   }
 
   fline <- check_nexus(fline)
@@ -34,16 +34,16 @@ get_nexus <- function(fline, nexus_prefix = "nexus_") {
 
 check_nexus <- function(fline) {
   if("FromNode" %in% names(fline)) {
-    fline <- rename(fline, from_nID = FromNode)
+    fline <- rename(fline, from_nID = .data$FromNode)
   } else if(!"from_nID" %in% names(fline)) {
     fline$from_nID <- fline$ID
   }
 
   if("ToNode" %in% names(fline)) {
-    fline <- rename(fline, to_nID = ToNode)
+    fline <- rename(fline, to_nID = .data$ToNode)
   } else if(!"to_nID" %in% names(fline)) {
     fline <- left_join(fline,
-                       select(st_drop_geometry(fline), ID, to_nID = from_nID),
+                       select(st_drop_geometry(fline), .data$ID, to_nID = .data$from_nID),
                        by = c("toID" = "ID"))
   }
 
@@ -62,7 +62,7 @@ get_catchment_edges <- function(fline,
                                 nexus_prefix = "nexus_",
                                 catchment_prefix = "catchment_") {
 
-  if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID)
+  if("COMID" %in% names(fline)) fline <- rename(fline, ID = .data$COMID)
 
   fline <- check_nexus(fline)
 
@@ -126,7 +126,8 @@ get_catchment_data <- function(catchment, catchment_edge_list,
 get_waterbody_data <- function(fline, waterbody_edge_list,
                                waterbody_prefix = "waterbody_") {
 
-  if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID, LevelPathID = LevelPathI)
+  if("COMID" %in% names(fline)) fline <- rename(fline, ID = .data$COMID,
+                                                LevelPathID = .data$LevelPathI)
 
   select(fline, ID = .data$ID,
          length_km = .data$LENGTHKM,

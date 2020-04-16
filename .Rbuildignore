@@ -7,3 +7,4 @@ DISCLAIMER
 ^Meta$
 _pkgdown.yml
 docs
+.*rosm.cache

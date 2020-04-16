@@ -3,7 +3,7 @@ title: "Introduction to hygeo"
 author: "dblodgett@usgs.gov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{nhdplusTools}
+  %\VignetteIndexEntry{hygeo intro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

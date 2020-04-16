@@ -1,12 +1,24 @@
 ---
-title: "Application of hygeo"
+title: "Application of hygeo with hyRefactor"
 author: "dblodgett@usgs.gov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{nhdplusTools}
+  %\VignetteIndexEntry{hyRefactor demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6,
+  fig.height=4,
+  eval=nzchar(Sys.getenv("BUILD_VIGNETTES"))
+)
+oldoption <- options(scipen = 9999)
+options(scipen = 9999)
+```
 
 Source dependencies and set up a bunch of files.
 ```{r}
@@ -120,7 +132,7 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              fline_rec = reconcile,
                                                              para = 1)
 ```
-```{r, eval=FALSE, echo=FALSE}
+```{r, eval=FALSE, include=FALSE}
 write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
 write_sf(reconcile_divides, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile_divides")
 ```
@@ -152,4 +164,8 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              out_reconciled = reconciled_small,
                              three_pass = TRUE,
                              purge_non_dendritic = FALSE)
+```
+
+```{r teardown, include=FALSE}
+options(oldoption)
 ```
