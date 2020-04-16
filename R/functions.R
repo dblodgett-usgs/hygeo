@@ -30,7 +30,7 @@ get_nexus <- function(fline, nexus_prefix = "nexus_") {
   nexus$ID <- paste0(nexus_prefix, fline$to_nID)
 
   if(length(unique(nexus$ID)) < nrow(nexus)) {
-    nexus <- group_by(nexus, ID) %>%
+    nexus <- group_by(nexus, .data$ID) %>%
       filter(row_number() == 1) %>%
       ungroup()
   }

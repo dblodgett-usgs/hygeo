@@ -21,12 +21,13 @@ options(scipen = 9999)
 ```
 
 Source dependencies and set up a bunch of files.
-```{r}
+```{r, eval=TRUE}
 library(nhdplusTools)
 library(hyRefactor)
 library(sf)
 library(tidyr)
 library(dplyr)
+library(hygeo)
 
 src_gpkg <- system.file("gpkg/sugar_creek_fort_mill.gpkg", package = "hygeo")
 fdr_tif <- system.file("tiff/sugar_creek_fort_mill_fdr.tif", package = "hygeo")
@@ -38,10 +39,14 @@ reconciled_small <- tempfile(fileext = ".gpkg")
 
 unlink(c(collapsed, collapsed_small, reconciled, reconciled_small), force = TRUE)
 
+catchment_prefix <- "cat-"
+waterbody_prefix <- "wat-"
+nexus_prefix <- "nex-"
+
 ```
 
 Now we will get some data and just plot up our area of interest.
-```{r}
+```{r, eval=TRUE}
 nhd <- nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
                                   overwrite = FALSE,
@@ -49,7 +54,7 @@ nhd <- nhdplusTools::plot_nhdplus(list(9731454),
 ```
 
 For this demonstration we'll just use NWIS Sites as they exist. Here we go grab upstream with tributaries NWIS Sites and index them to the network. This is all placeholder for doing this using a more formal process for selection of network locations. 
-```{r}
+```{r, eval=TRUE}
 nwis <- nhdplusTools::navigate_nldi(list(featureSource = "comid", 
                                          featureID = 9731454),
                                     mode = "UT", 
@@ -78,7 +83,7 @@ nhdplusTools::plot_nhdplus(list(9731454),
 plot(st_transform(nwis_sites$geometry, 3857), pch = 24, bg = "darkgrey", add = TRUE)
 ```
 
-```{r}
+```{r, eval=TRUE}
 hyRefactor::refactor_nhdplus(nhd$flowline,
                              split_flines_meters = 10000,
                              split_flines_cores = 10000,
@@ -111,7 +116,7 @@ nwis_sites$local_id <-
            if(nrow(id) > 1) {
              id <- filter(id, Hydroseq == min(Hydroseq))
            }
-           id$ID
+           paste0(waterbody_prefix, id$ID)
          })
 
 fdr <- raster::raster(fdr_tif)
@@ -138,12 +143,59 @@ write_sf(reconcile_divides, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg"
 ```
 
 We can now pass reconciled divides into the hygeo package functions to generate catchment areas, waterbodies, and nexuses.
-```{r}
+```{r, eval=TRUE}
+nexus <- get_nexus(reconcile, 
+                   nexus_prefix = nexus_prefix)
+
+catchment_edge_list <- get_catchment_edges(reconcile,
+                                           catchment_prefix = catchment_prefix,
+                                           nexus_prefix = nexus_prefix)
+waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list,
+                                               catchment_prefix = catchment_prefix,
+                                               waterbody_prefix = waterbody_prefix)
+sqkm_per_sqm <- 1 / 1000^2
+
+reconcile_divides$area_sqkm <- as.numeric(st_area(st_transform(reconcile_divides, 5070))) * sqkm_per_sqm
+
+catchment_data <- get_catchment_data(reconcile_divides,
+                                     catchment_edge_list,
+                                     catchment_prefix = catchment_prefix)
+waterbody_data <- get_waterbody_data(reconcile,
+                                     waterbody_edge_list,
+                                     waterbody_prefix = waterbody_prefix)
+
+nexus_data <- get_nexus_data(nexus,
+                             catchment_edge_list,
+                             waterbody_edge_list)
+
+mapview::mapview(catchment_data, layer.name = "Catchment Area", col.regions = "tan") +
+  mapview::mapview(waterbody_data, layer.name = "Flowpaths", color = "blue") +
+  mapview::mapview(nexus_data, layer.name = "Nexuses", cex = 3, color = "yellow4", col.regions = "yellow4") + 
+  mapview::mapview(nwis_sites, layer.name = "NWIS Sites", cex = 6, color = "darkgrey", col.regions = "grey")
+
 
 ```
 
+The outputs can be rendered into csv or json:
+```{r output, eval=FALSE}
+
+jsonlite::write_json(catchment_edge_list, "catchment_edge_list.json", 
+                     pretty = TRUE)
+
+jsonlite::write_json(waterbody_edge_list, "waterbody_edge_list.json", 
+                     pretty = TRUE)
+
+write_sf(st_transform(catchment_data, 4326), "catchment_data.geojson")
+
+write_sf(st_transform(waterbody_data, 4326), "waterbody_data.geojson")
+
+write_sf(st_transform(nexus_data, 4326), "nexus_data.geojson")
+
+write_sf(st_transform(nwis_sites, 4326), "nwis_sites.geojson")
+```
+
 If needed, we can further break up the flowline network ensuring the outlets in the catchment network are included.
-```{r}
+```{r, eval=TRUE}
 outlet_comids <- select(st_drop_geometry(reconcile), ID, member_COMID) %>%
   mutate(member_COMID = strsplit(member_COMID, ",")) %>%
   unnest(cols = member_COMID) %>%
@@ -166,6 +218,6 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              purge_non_dendritic = FALSE)
 ```
 
-```{r teardown, include=FALSE}
+```{r teardown, include=FALSE, eval=TRUE}
 options(oldoption)
 ```

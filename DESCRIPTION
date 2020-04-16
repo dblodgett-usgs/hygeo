@@ -1,7 +1,7 @@
 Package: hygeo
 Type: Package
 Title: Hydrologic Geospatial Fabric Creation Functions
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person(given = "David", 
                     family = "Blodgett", 
                     role = c("aut", "cre"), 
@@ -10,7 +10,7 @@ Description: hygeo generates inputs for the Next Generation Water Modeling Engin
 URL: https://github.com/dblodgett-usgs/hygeo
 BugReports: https://github.com/dblodgett-usgs/hygeo/issues
 Imports: dplyr, sf, magrittr
-Suggests: knitr, testthat, nhdplusTools, hyRefactor, jsonlite
+Suggests: knitr, testthat, nhdplusTools, hyRefactor, jsonlite, mapview, dataRetrieval, raster, tidyr
 License: CC0
 Encoding: UTF-8
 LazyData: true

@@ -1,6 +1,7 @@
-pandoc: 2.3.1
+pandoc: 2.9.2.1
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   hygeo: hygeo.html
+  sugar_creek_refactor: sugar_creek_refactor.html
 

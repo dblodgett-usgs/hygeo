@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/dblodgett-usgs/hygeo.svg?branch=master)](https://travis-ci.org/dblodgett-usgs/hygeo) [![Coverage Status](https://coveralls.io/repos/github/dblodgett-usgs/hygeo/badge.svg?branch=master)](https://coveralls.io/github/dblodgett-usgs/hygeo?branch=master)
 
+installation: `remotes::install_github("dblodgett-usgs/hygeo")`
+
 This R package is part of the Next Generation Water Modeling Engine and Framework Prototype project taking place here: https://github.com/NOAA-OWP/ngen
 
 ## Summary of Data Created
