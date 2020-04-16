@@ -107,7 +107,7 @@ get_waterbody_edge_list <- function(catchment_edge_list,
 #' @export
 get_catchment_data <- function(catchment, catchment_edge_list,
                                catchment_prefix = "catchment_") {
-  if("FEATUREID" %in% names(catchment)) catchment <- rename(ID = .data$FEATUREID, area_sqkm = .data$AreaSqKM)
+  if("FEATUREID" %in% names(catchment)) catchment <- rename(catchment, ID = .data$FEATUREID, area_sqkm = .data$AreaSqKM)
 
   if(!"area_sqkm" %in% names(catchment)) stop("must supply area as AreaSqKM or area_sqkm")
 
@@ -126,12 +126,12 @@ get_catchment_data <- function(catchment, catchment_edge_list,
 get_waterbody_data <- function(fline, waterbody_edge_list,
                                waterbody_prefix = "waterbody_") {
 
-  if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID)
+  if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID, LevelPathID = LevelPathI)
 
   select(fline, ID = .data$ID,
          length_km = .data$LENGTHKM,
          slope_percent = .data$slope,
-         main_id = .data$LevelPathI) %>%
+         main_id = .data$LevelPathID) %>%
     mutate(ID = paste0(waterbody_prefix, .data$ID)) %>%
     left_join(waterbody_edge_list, by = "ID")
 }

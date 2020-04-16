@@ -81,6 +81,17 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
 collapse <- sf::read_sf(collapsed)
 reconcile <- sf::read_sf(reconciled)
 
+slope <- select(st_drop_geometry(reconcile), ID, member_COMID) %>%
+  mutate(member_COMID = strsplit(member_COMID, ",")) %>%
+  unnest(cols = member_COMID) %>%
+  mutate(member_COMID = floor(as.numeric(member_COMID))) %>%
+  left_join(select(st_drop_geometry(nhd$flowline), COMID, slope), 
+            by = c("member_COMID" = "COMID")) %>%
+  group_by(ID) %>%
+  summarise(slope = mean(slope))
+
+reconcile <- left_join(reconcile, slope, by = "ID")
+
 nwis_sites$local_id <- 
   sapply(as.character(nwis_sites$COMID), 
          function(x) {
@@ -108,6 +119,15 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              fline_ref = collapse,
                                                              fline_rec = reconcile,
                                                              para = 1)
+```
+```{r, eval=FALSE, echo=FALSE}
+write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
+write_sf(reconcile_divides, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile_divides")
+```
+
+We can now pass reconciled divides into the hygeo package functions to generate catchment areas, waterbodies, and nexuses.
+```{r}
+
 ```
 
 If needed, we can further break up the flowline network ensuring the outlets in the catchment network are included.
