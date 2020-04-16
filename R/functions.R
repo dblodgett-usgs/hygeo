@@ -18,11 +18,7 @@ get_nexus <- function(fline, nexus_prefix = "nexus_") {
     nexus <- rename(nexus, GG = L1)
   }
 
-  if("ToNode" %in% names(fline)) {
-    fline <- rename(fline, to_nID = ToNode)
-  } else if(!"to_nID" %in% names(fline)) {
-    fline$to_nID <- fline$ID
-  }
+  fline <- check_nexus(fline)
 
   nexus <- nexus %>%
     group_by(.data$GG) %>%
@@ -34,6 +30,25 @@ get_nexus <- function(fline, nexus_prefix = "nexus_") {
   nexus$ID <- paste0(nexus_prefix, fline$to_nID)
 
   return(nexus)
+}
+
+check_nexus <- function(fline) {
+  if("FromNode" %in% names(fline)) {
+    fline <- rename(fline, from_nID = FromNode)
+  } else if(!"from_nID" %in% names(fline)) {
+    fline$from_nID <- fline$ID
+  }
+
+  if("ToNode" %in% names(fline)) {
+    fline <- rename(fline, to_nID = ToNode)
+  } else if(!"to_nID" %in% names(fline)) {
+    fline <- left_join(fline,
+                       select(st_drop_geometry(fline), ID, to_nID = from_nID),
+                       by = c("toID" = "ID"))
+  }
+
+  fline
+
 }
 
 #' @title get catchment edges
@@ -49,16 +64,18 @@ get_catchment_edges <- function(fline,
 
   if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID)
 
+  fline <- check_nexus(fline)
+
   bind_rows(
 
     st_drop_geometry(fline) %>%
-      select(ID = .data$ID, toID = .data$ToNode) %>%
+      select(ID = .data$ID, toID = .data$to_nID) %>%
       mutate(ID = paste0(catchment_prefix, .data$ID),
              toID = paste0(nexus_prefix, .data$toID)),
 
-    tibble(ID = unique(fline$ToNode)) %>%
+    tibble(ID = unique(fline$to_nID)) %>%
       left_join(select(st_drop_geometry(fline),
-                       ID = .data$FromNode, toID = .data$ID),
+                       ID = .data$from_nID, toID = .data$ID),
                 by = "ID") %>%
       mutate(toID = ifelse(is.na(.data$toID), 0, .data$toID)) %>%
       mutate(ID = paste0(nexus_prefix, .data$ID),
@@ -90,7 +107,11 @@ get_waterbody_edge_list <- function(catchment_edge_list,
 #' @export
 get_catchment_data <- function(catchment, catchment_edge_list,
                                catchment_prefix = "catchment_") {
-  catchment <- select(catchment, ID = .data$FEATUREID, area_sqkm = .data$AreaSqKM) %>%
+  if("FEATUREID" %in% names(catchment)) catchment <- rename(ID = .data$FEATUREID, area_sqkm = .data$AreaSqKM)
+
+  if(!"area_sqkm" %in% names(catchment)) stop("must supply area as AreaSqKM or area_sqkm")
+
+  catchment <- select(catchment, ID = .data$ID, area_sqkm = .data$area_sqkm) %>%
     mutate(ID = paste0(catchment_prefix, .data$ID)) %>%
     left_join(catchment_edge_list, by = "ID")
 }
