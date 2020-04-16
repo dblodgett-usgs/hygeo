@@ -7,7 +7,7 @@
 get_waterbody_data(fline, waterbody_edge_list, waterbody_prefix = "waterbody_")
 }
 \arguments{
-\item{fline}{sf data.frame NHDPlus Flowlines}
+\item{fline}{sf data.frame NHDPlus Flowlines or hyRefactor output.}
 
 \item{waterbody_edge_list}{data.frame edge list of connections
 to/from waterbodies}

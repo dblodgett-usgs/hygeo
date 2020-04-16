@@ -1,7 +1,7 @@
 .data <- NULL
 
 #' @title get nexuses
-#' @param fline sf data.frame NHDPlus Flowlines
+#' @param fline sf data.frame NHDPlus Flowlines or hyRefactor output.
 #' @param nexus_prefix character prefix for nexus IDs
 #' @importFrom sf st_coordinates st_as_sf st_crs
 #' @importFrom magrittr %>%
@@ -10,20 +10,34 @@
 get_nexus <- function(fline, nexus_prefix = "nexus_") {
   nexus <- fline %>%
     st_coordinates() %>%
-    as.data.frame() %>%
-    group_by(.data$L2) %>%
+    as.data.frame()
+
+  if("L2" %in% names(nexus)) {
+    nexus <- rename(nexus, GG = L2)
+  } else {
+    nexus <- rename(nexus, GG = L1)
+  }
+
+  if("ToNode" %in% names(fline)) {
+    fline <- rename(fline, to_nID = ToNode)
+  } else if(!"to_nID" %in% names(fline)) {
+    fline$to_nID <- fline$ID
+  }
+
+  nexus <- nexus %>%
+    group_by(.data$GG) %>%
     filter(row_number() == n()) %>%
     ungroup() %>%
     select(.data$X, .data$Y) %>%
     st_as_sf(coords = c("X", "Y"), crs = st_crs(fline))
 
-  nexus$ID <- paste0(nexus_prefix, fline$ToNode)
+  nexus$ID <- paste0(nexus_prefix, fline$to_nID)
 
   return(nexus)
 }
 
 #' @title get catchment edges
-#' @param fline sf data.frame NHDPlus Flowlines
+#' @param fline sf data.frame NHDPlus Flowlines or hyRefactor output.
 #' @param nexus_prefix character prefix for nexus IDs
 #' @param catchment_prefix character prefix for catchment IDs
 #' @importFrom dplyr bind_rows select mutate tibble left_join
@@ -32,16 +46,19 @@ get_nexus <- function(fline, nexus_prefix = "nexus_") {
 get_catchment_edges <- function(fline,
                                 nexus_prefix = "nexus_",
                                 catchment_prefix = "catchment_") {
+
+  if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID)
+
   bind_rows(
 
     st_drop_geometry(fline) %>%
-      select(ID = .data$COMID, toID = .data$ToNode) %>%
+      select(ID = .data$ID, toID = .data$ToNode) %>%
       mutate(ID = paste0(catchment_prefix, .data$ID),
              toID = paste0(nexus_prefix, .data$toID)),
 
     tibble(ID = unique(fline$ToNode)) %>%
       left_join(select(st_drop_geometry(fline),
-                       ID = .data$FromNode, toID = .data$COMID),
+                       ID = .data$FromNode, toID = .data$ID),
                 by = "ID") %>%
       mutate(toID = ifelse(is.na(.data$toID), 0, .data$toID)) %>%
       mutate(ID = paste0(nexus_prefix, .data$ID),
@@ -65,7 +82,7 @@ get_waterbody_edge_list <- function(catchment_edge_list,
 }
 
 #' @title get catchment data
-#' @param catchment sf data.frame NHDPlus Catchments
+#' @param catchment sf data.frame NHDPlus Catchments or hyRefactor output.
 #' @param catchment_edge_list data.frame edge list of connections
 #' to/from catchments
 #' @param catchment_prefix character prefix for catchment IDs
@@ -79,7 +96,7 @@ get_catchment_data <- function(catchment, catchment_edge_list,
 }
 
 #' @title get_waterbody_data
-#' @param fline sf data.frame NHDPlus Flowlines
+#' @param fline sf data.frame NHDPlus Flowlines or hyRefactor output.
 #' @param waterbody_edge_list data.frame edge list of connections
 #' to/from waterbodies
 #' @param waterbody_prefix character prefix for waterbody IDs
@@ -87,7 +104,10 @@ get_catchment_data <- function(catchment, catchment_edge_list,
 #' @export
 get_waterbody_data <- function(fline, waterbody_edge_list,
                                waterbody_prefix = "waterbody_") {
-  select(fline, ID = .data$COMID,
+
+  if("COMID" %in% names(fline)) fline <- rename(fline, ID = COMID)
+
+  select(fline, ID = .data$ID,
          length_km = .data$LENGTHKM,
          slope_percent = .data$slope,
          main_id = .data$LevelPathI) %>%

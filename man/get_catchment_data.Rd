@@ -11,7 +11,7 @@ get_catchment_data(
 )
 }
 \arguments{
-\item{catchment}{sf data.frame NHDPlus Catchments}
+\item{catchment}{sf data.frame NHDPlus Catchments or hyRefactor output.}
 
 \item{catchment_edge_list}{data.frame edge list of connections
 to/from catchments}

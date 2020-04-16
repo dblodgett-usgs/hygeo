@@ -7,7 +7,7 @@
 get_nexus(fline, nexus_prefix = "nexus_")
 }
 \arguments{
-\item{fline}{sf data.frame NHDPlus Flowlines}
+\item{fline}{sf data.frame NHDPlus Flowlines or hyRefactor output.}
 
 \item{nexus_prefix}{character prefix for nexus IDs}
 }

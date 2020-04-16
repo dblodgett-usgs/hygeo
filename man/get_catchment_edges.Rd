@@ -11,7 +11,7 @@ get_catchment_edges(
 )
 }
 \arguments{
-\item{fline}{sf data.frame NHDPlus Flowlines}
+\item{fline}{sf data.frame NHDPlus Flowlines or hyRefactor output.}
 
 \item{nexus_prefix}{character prefix for nexus IDs}
 
