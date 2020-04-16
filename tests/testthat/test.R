@@ -20,7 +20,7 @@ test_that("all functions run", {
   expect_true("ID" %in% names(nexus))
   expect_equal(nexus$ID[1], "nexus_250031932")
   expect_is(st_geometry(nexus), "sfc_POINT")
-  expect_equal(nrow(nexus), 4)
+  expect_equal(nrow(nexus), 3)
 
   catchment_edge_list <- get_catchment_edges(fline,
                                              catchment_prefix = "cat-",
