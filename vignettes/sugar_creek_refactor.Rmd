@@ -8,6 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+Source dependencies and set up a bunch of files.
 ```{r}
 library(nhdplusTools)
 library(hyRefactor)
@@ -25,12 +26,47 @@ reconciled_small <- tempfile(fileext = ".gpkg")
 
 unlink(c(collapsed, collapsed_small, reconciled, reconciled_small), force = TRUE)
 
+```
+
+Now we will get some data and just plot up our area of interest.
+```{r}
 nhd <- nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
                                   overwrite = FALSE,
-                                  nhdplus_data = src_gpkg,
-                                  actually_plot = FALSE)
+                                  nhdplus_data = src_gpkg)
+```
 
+For this demonstration we'll just use NWIS Sites as they exist. Here we go grab upstream with tributaries NWIS Sites and index them to the network. This is all placeholder for doing this using a more formal process for selection of network locations. 
+```{r}
+nwis <- nhdplusTools::navigate_nldi(list(featureSource = "comid", 
+                                         featureID = 9731454),
+                                    mode = "UT", 
+                                    data_source = "nwissite")
+
+what_nwis_data <- dataRetrieval::whatNWISdata(siteNumber = gsub("USGS-", "", nwis$identifier))
+
+nwis_sites <- filter(what_nwis_data, parm_cd == "00060" & data_type_cd == "uv") %>%
+  st_as_sf(coords = c("dec_long_va", "dec_lat_va"), 
+                       crs = 4269) %>%
+  bind_cols(nhdplusTools::get_flowline_index(
+              st_transform(nhd$flowline, 5070), 
+              ., search_radius = 50)) %>%
+  filter(!is.na(COMID)) %>%
+  st_sf() %>%
+  select(site_no, COMID, offset)
+
+# Check if we have catchment polygons for all our gage outlets.
+all(nwis_sites$COMID %in% nhd$catchment$FEATUREID)
+
+nhdplusTools::plot_nhdplus(list(9731454),
+                                  gpkg = src_gpkg,
+                                  overwrite = FALSE,
+                                  nhdplus_data = src_gpkg,
+                                  actually_plot = TRUE)
+plot(st_transform(nwis_sites$geometry, 3857), pch = 24, bg = "darkgrey", add = TRUE)
+```
+
+```{r}
 hyRefactor::refactor_nhdplus(nhd$flowline,
                              split_flines_meters = 10000,
                              split_flines_cores = 10000,
@@ -39,10 +75,21 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              out_collapsed = collapsed,
                              out_reconciled = reconciled,
                              three_pass = TRUE,
-                             purge_non_dendritic = FALSE)
+                             purge_non_dendritic = FALSE, 
+                             exclude_cats = nwis_sites$COMID)
 
 collapse <- sf::read_sf(collapsed)
 reconcile <- sf::read_sf(reconciled)
+
+nwis_sites$local_id <- 
+  sapply(as.character(nwis_sites$COMID), 
+         function(x) {
+           id <- reconcile[grepl(x, reconcile$member_COMID), ]
+           if(nrow(id) > 1) {
+             id <- filter(id, Hydroseq == min(Hydroseq))
+           }
+           id$ID
+         })
 
 fdr <- raster::raster(fdr_tif)
 fac <- raster::raster(fac_tif)
@@ -61,7 +108,10 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              fline_ref = collapse,
                                                              fline_rec = reconcile,
                                                              para = 1)
+```
 
+If needed, we can further break up the flowline network ensuring the outlets in the catchment network are included.
+```{r}
 outlet_comids <- select(st_drop_geometry(reconcile), ID, member_COMID) %>%
   mutate(member_COMID = strsplit(member_COMID, ",")) %>%
   unnest(cols = member_COMID) %>%
