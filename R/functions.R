@@ -91,17 +91,29 @@ get_catchment_edges <- function(fline,
 }
 
 #' @title get waterbody edge list
-#' @param catchment_edge_list data.frame as returned by get_catchment_edges
-#' @param catchment_prefix character prefix for catchment IDs
+#' @description Takes flowlines from either NHDPlus or hyRefactor and returns
+#' dendritic waterbody topology. This maps onto the HY_Features waterbody class
+#' and downstream waterbody associations.
+#' See: https://docs.opengeospatial.org/is/14-111r6/14-111r6.html#_the_hydrographic_network_model
+#' @param fline sf data.frame NHDPlus Flowlines or hyRefactor output.
 #' @param waterbody_prefix character prefix for waterbody IDs
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate filter
+#' @importFrom nhdplusTools prepare_nhdplus
 #' @export
-get_waterbody_edge_list <- function(catchment_edge_list,
-                                    catchment_prefix = "catchment_",
+get_waterbody_edge_list <- function(fline,
                                     waterbody_prefix = "waterbody_") {
-  mutate(catchment_edge_list,
-         ID = gsub(catchment_prefix, waterbody_prefix, .data$ID),
-         toID = gsub(catchment_prefix, waterbody_prefix, .data$toID))
+  if("COMID" %in% names(fline) && !"toCOMID" %in% names(fline)) {
+    fline <- prepare_nhdplus(fline, 0, 0, 0, FALSE, warn = FALSE) %>%
+      select(ID = .data$COMID, toID = .data$toCOMID)
+  } else {
+    try(fline <- st_drop_geometry(fline), silent = TRUE)
+  }
+
+  fline %>%
+    select(.data$ID, .data$toID) %>%
+    mutate(toID = ifelse(is.na(.data$toID), 0, .data$toID)) %>%
+    mutate(ID = paste0(waterbody_prefix, .data$ID),
+           toID = paste0(waterbody_prefix, .data$toID))
 }
 
 #' @title get catchment data

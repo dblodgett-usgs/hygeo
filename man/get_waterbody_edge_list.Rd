@@ -4,19 +4,16 @@
 \alias{get_waterbody_edge_list}
 \title{get waterbody edge list}
 \usage{
-get_waterbody_edge_list(
-  catchment_edge_list,
-  catchment_prefix = "catchment_",
-  waterbody_prefix = "waterbody_"
-)
+get_waterbody_edge_list(fline, waterbody_prefix = "waterbody_")
 }
 \arguments{
-\item{catchment_edge_list}{data.frame as returned by get_catchment_edges}
-
-\item{catchment_prefix}{character prefix for catchment IDs}
+\item{fline}{sf data.frame NHDPlus Flowlines or hyRefactor output.}
 
 \item{waterbody_prefix}{character prefix for waterbody IDs}
 }
 \description{
-get waterbody edge list
+Takes flowlines from either NHDPlus or hyRefactor and returns
+dendritic waterbody topology. This maps onto the HY_Features waterbody class
+and downstream waterbody associations.
+See: https://docs.opengeospatial.org/is/14-111r6/14-111r6.html#_the_hydrographic_network_model
 }

@@ -30,13 +30,13 @@ test_that("all functions run", {
   expect_equal(catchment_edge_list$ID[1], "cat-8895442")
   expect_equal(catchment_edge_list$toID[1], "nex-250031932")
 
-  waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list,
-                                                 catchment_prefix = "cat-",
-                                                 waterbody_prefix = "wat-")
-
+  expect_warning(
+  waterbody_edge_list <- get_waterbody_edge_list(fline,
+                                                 waterbody_prefix = "wat-"),
+  "Got NHDPlus data without a Terminal catchment. Attempting to find it.")
   expect_equal(names(waterbody_edge_list), c("ID", "toID"))
   expect_equal(waterbody_edge_list$ID[1], "wat-8895442")
-  expect_equal(waterbody_edge_list$toID[1], "nex-250031932")
+  expect_equal(waterbody_edge_list$toID[1], "wat-8895402")
 
   catchment_data <- get_catchment_data(catchment,
                                        catchment_edge_list,

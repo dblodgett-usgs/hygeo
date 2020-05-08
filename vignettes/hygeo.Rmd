@@ -62,7 +62,7 @@ Given the flowlines, catchments, and nexuses, we can generate topology edge list
 ```{r create_output, echo=TRUE, eval=TRUE}
 (catchment_edge_list <- get_catchment_edges(fline))
 
-(waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list))
+(waterbody_edge_list <- get_waterbody_edge_list(fline))
 
 (catchment_data <- get_catchment_data(catchment, catchment_edge_list))
 

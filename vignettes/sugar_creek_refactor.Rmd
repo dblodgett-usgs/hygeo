@@ -151,7 +151,6 @@ catchment_edge_list <- get_catchment_edges(reconcile,
                                            catchment_prefix = catchment_prefix,
                                            nexus_prefix = nexus_prefix)
 waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list,
-                                               catchment_prefix = catchment_prefix,
                                                waterbody_prefix = waterbody_prefix)
 sqkm_per_sqm <- 1 / 1000^2
 

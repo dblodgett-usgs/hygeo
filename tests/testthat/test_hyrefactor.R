@@ -26,13 +26,19 @@ test_that("all functions run", {
   expect_equal(catchment_edge_list$ID[1], "cat-1")
   expect_equal(catchment_edge_list$toID[1], "nex-4")
 
-  waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list,
-                                                 catchment_prefix = "cat-",
+  waterbody_edge_list <- get_waterbody_edge_list(fline,
                                                  waterbody_prefix = "wat-")
 
   expect_equal(names(waterbody_edge_list), c("ID", "toID"))
   expect_equal(waterbody_edge_list$ID[1], "wat-1")
-  expect_equal(waterbody_edge_list$toID[1], "nex-4")
+  expect_equal(waterbody_edge_list$toID[1], "wat-4")
+
+  waterbody_edge_list <- get_waterbody_edge_list(sf::st_drop_geometry(fline),
+                                                 waterbody_prefix = "wat-")
+
+  expect_equal(names(waterbody_edge_list), c("ID", "toID"))
+  expect_equal(waterbody_edge_list$ID[1], "wat-1")
+  expect_equal(waterbody_edge_list$toID[1], "wat-4")
 
   sqkm_per_sqm <- 1 / 1000^2
 
