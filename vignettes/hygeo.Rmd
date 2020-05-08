@@ -3,18 +3,18 @@ title: "Introduction to hygeo"
 author: "dblodgett@usgs.gov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{hygeo intro}
+%\VignetteIndexEntry{hygeo intro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-
-```{r setup, include = FALSE}
+  ---
+  
+  ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.width=6,
-  fig.height=4,
-  eval=nzchar(Sys.getenv("BUILD_VIGNETTES"))
+collapse = TRUE,
+comment = "#>",
+fig.width=6,
+fig.height=4,
+eval=nzchar(Sys.getenv("BUILD_VIGNETTES"))
 )
 oldoption <- options(scipen = 9999)
 options(scipen = 9999)
@@ -60,15 +60,24 @@ plot(st_transform(st_geometry(nexus), 3857), add = TRUE)
 Given the flowlines, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowlines in this case. Waterbodies are 1:1 with catchments in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.
 
 ```{r create_output, echo=TRUE, eval=TRUE}
-(catchment_edge_list <- get_catchment_edges(fline))
+catchment_prefix <- "catchment_"
+nexus_prefix <- "nexus_"
+waterbody_prefix <- "waterbody_"
 
-(waterbody_edge_list <- get_waterbody_edge_list(fline))
+(catchment_edge_list <- get_catchment_edges(fline, 
+                                            catchment_prefix = catchment_prefix, 
+                                            nexus_prefix = nexus_prefix))
+
+(waterbody_edge_list <- get_waterbody_edge_list(fline, waterbody_prefix = waterbody_prefix))
 
 (catchment_data <- get_catchment_data(catchment, catchment_edge_list))
 
-(waterbody_data <- get_waterbody_data(fline, waterbody_edge_list))
+(waterbody_data <- get_waterbody_data(fline, waterbody_edge_list) %>%
+    mutate(realized_catchment = gsub(waterbody_prefix, 
+                                     catchment_prefix, ID)))
 
 (nexus_data <- get_nexus_data(nexus, catchment_edge_list, waterbody_edge_list))
+
 ```
 
 The outputs can be rendered into csv or json:

@@ -159,9 +159,12 @@ reconcile_divides$area_sqkm <- as.numeric(st_area(st_transform(reconcile_divides
 catchment_data <- get_catchment_data(reconcile_divides,
                                      catchment_edge_list,
                                      catchment_prefix = catchment_prefix)
+
 waterbody_data <- get_waterbody_data(reconcile,
                                      waterbody_edge_list,
-                                     waterbody_prefix = waterbody_prefix)
+                                     waterbody_prefix = waterbody_prefix) %>%
+      mutate(realized_catchment = gsub(waterbody_prefix, 
+                                     catchment_prefix, ID))
 
 nexus_data <- get_nexus_data(nexus,
                              catchment_edge_list,
