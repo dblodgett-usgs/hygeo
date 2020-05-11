@@ -36,7 +36,10 @@
 
 
 <meta property="og:title" content="get waterbody edge list — get_waterbody_edge_list" />
-<meta property="og:description" content="get waterbody edge list" />
+<meta property="og:description" content="Takes flowlines from either NHDPlus or hyRefactor and returns
+dendritic waterbody topology. This maps onto the HY_Features waterbody class
+and downstream waterbody associations.
+See: https://docs.opengeospatial.org/is/14-111r6/14-111r6.html#_the_hydrographic_network_model" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hygeo</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0</span>
       </span>
     </div>
 
@@ -126,25 +129,20 @@
     </div>
 
     <div class="ref-description">
-    <p>get waterbody edge list</p>
+    <p>Takes flowlines from either NHDPlus or hyRefactor and returns
+dendritic waterbody topology. This maps onto the HY_Features waterbody class
+and downstream waterbody associations.
+See: https://docs.opengeospatial.org/is/14-111r6/14-111r6.html#_the_hydrographic_network_model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_waterbody_edge_list</span>(
-  <span class='no'>catchment_edge_list</span>,
-  <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment_"</span>,
-  <span class='kw'>waterbody_prefix</span> <span class='kw'>=</span> <span class='st'>"waterbody_"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>get_waterbody_edge_list</span>(<span class='no'>fline</span>, <span class='kw'>waterbody_prefix</span> <span class='kw'>=</span> <span class='st'>"waterbody_"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>catchment_edge_list</th>
-      <td><p>data.frame as returned by get_catchment_edges</p></td>
-    </tr>
-    <tr>
-      <th>catchment_prefix</th>
-      <td><p>character prefix for catchment IDs</p></td>
+      <th>fline</th>
+      <td><p>sf data.frame NHDPlus Flowlines or hyRefactor output.</p></td>
     </tr>
     <tr>
       <th>waterbody_prefix</th>

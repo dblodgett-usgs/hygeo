@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduction to hygeo • hygeo</title>
+<title> • hygeo</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to hygeo">
+<script src="../pkgdown.js"></script><meta property="og:title" content="">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <meta name="robots" content="noindex">
@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hygeo</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0</span>
       </span>
     </div>
 
@@ -80,11 +80,10 @@
 
       
 
-      </header><script src="hygeo_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><script src="hygeo_files/header-attrs-2.1.2/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Introduction to hygeo</h1>
-                        <h4 class="author"><a href="mailto:dblodgett@usgs.gov" class="email">dblodgett@usgs.gov</a></h4>
+      <h1></h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/dblodgett-usgs/hygeo/blob/master/vignettes/hygeo.Rmd"><code>vignettes/hygeo.Rmd</code></a></small>
@@ -94,6 +93,30 @@
 
     
     
+<table class="table"><tbody>
+<tr class="odd">
+<td>title: “Introduction to hygeo”</td>
+</tr>
+<tr class="even">
+<td>author: "<a href="mailto:dblodgett@usgs.gov%22" class="email">dblodgett@usgs.gov"</a>
+</td>
+</tr>
+<tr class="odd">
+<td>output: rmarkdown::html_vignette</td>
+</tr>
+<tr class="even">
+<td>vignette: &gt;</td>
+</tr>
+<tr class="odd">
+<td>%</td>
+</tr>
+<tr class="even">
+<td>%</td>
+</tr>
+<tr class="odd">
+<td>%</td>
+</tr>
+</tbody></table>
 <p>The following example shows how to work with data following the NHDPlusV2 schema.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># https://github.com/usgs-r/nhdplusTools</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nhdplusTools)</span>
@@ -140,74 +163,79 @@
 <span id="cb1-43"><a href="#cb1-43"></a><span class="kw"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sf/man/st_transform.html">st_transform</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sf/man/st_geometry.html">st_geometry</a></span>(nexus), <span class="dv">3857</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="hygeo_files/figure-html/get_data-1.png" width="576"></p>
 <p>Given the flowlines, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowlines in this case. Waterbodies are 1:1 with catchments in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>(catchment_edge_list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_catchment_edges.html">get_catchment_edges</a></span>(fline))</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; # A tibble: 7 x 2</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt;   ID                toID             </span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; * &lt;chr&gt;             &lt;chr&gt;            </span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; 1 catchment_8895442 nexus_250031932  </span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 2 catchment_8895520 nexus_250031930  </span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 3 catchment_8895396 nexus_250031903  </span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 4 catchment_8895402 nexus_250031930  </span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 5 nexus_250031932   catchment_8895402</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; 6 nexus_250031930   catchment_8895396</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 7 nexus_250031903   catchment_0</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a>(waterbody_edge_list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_waterbody_edge_list.html">get_waterbody_edge_list</a></span>(catchment_edge_list))</span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; # A tibble: 7 x 2</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt;   ID                toID             </span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; * &lt;chr&gt;             &lt;chr&gt;            </span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; 1 waterbody_8895442 nexus_250031932  </span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; 2 waterbody_8895520 nexus_250031930  </span></span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; 3 waterbody_8895396 nexus_250031903  </span></span>
-<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt; 4 waterbody_8895402 nexus_250031930  </span></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt; 5 nexus_250031932   waterbody_8895402</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt; 6 nexus_250031930   waterbody_8895396</span></span>
-<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt; 7 nexus_250031903   waterbody_0</span></span>
-<span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a>(catchment_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_catchment_data.html">get_catchment_data</a></span>(catchment, catchment_edge_list))</span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; Simple feature collection with 4 features and 3 fields</span></span>
-<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt; geometry type:  MULTIPOLYGON</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#&gt; dimension:      XY</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a><span class="co">#&gt; bbox:           xmin: -79.16293 ymin: 35.97214 xmax: -79.11032 ymax: 35.99623</span></span>
-<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
-<span id="cb2-31"><a href="#cb2-31"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
-<span id="cb2-32"><a href="#cb2-32"></a><span class="co">#&gt;   ID         area_sqkm                                            geom toID     </span></span>
-<span id="cb2-33"><a href="#cb2-33"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;                              &lt;MULTIPOLYGON [°]&gt; &lt;chr&gt;    </span></span>
-<span id="cb2-34"><a href="#cb2-34"></a><span class="co">#&gt; 1 catchment…      1.86 (((-79.15822 35.98449, -79.15997 35.98514, -79… nexus_25…</span></span>
-<span id="cb2-35"><a href="#cb2-35"></a><span class="co">#&gt; 2 catchment…      1.28 (((-79.13297 35.97544, -79.13245 35.9787, -79.… nexus_25…</span></span>
-<span id="cb2-36"><a href="#cb2-36"></a><span class="co">#&gt; 3 catchment…      2.12 (((-79.13297 35.97544, -79.13369 35.97596, -79… nexus_25…</span></span>
-<span id="cb2-37"><a href="#cb2-37"></a><span class="co">#&gt; 4 catchment…      1.77 (((-79.11932 35.98001, -79.12077 35.98198, -79… nexus_25…</span></span>
-<span id="cb2-38"><a href="#cb2-38"></a></span>
-<span id="cb2-39"><a href="#cb2-39"></a>(waterbody_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_waterbody_data.html">get_waterbody_data</a></span>(fline, waterbody_edge_list))</span>
-<span id="cb2-40"><a href="#cb2-40"></a><span class="co">#&gt; Simple feature collection with 4 features and 5 fields</span></span>
-<span id="cb2-41"><a href="#cb2-41"></a><span class="co">#&gt; geometry type:  MULTILINESTRING</span></span>
-<span id="cb2-42"><a href="#cb2-42"></a><span class="co">#&gt; dimension:      XYZ</span></span>
-<span id="cb2-43"><a href="#cb2-43"></a><span class="co">#&gt; bbox:           xmin: -79.16244 ymin: 35.97413 xmax: -79.11841 ymax: 35.99613</span></span>
-<span id="cb2-44"><a href="#cb2-44"></a><span class="co">#&gt; z_range:        zmin: 0 zmax: 0</span></span>
-<span id="cb2-45"><a href="#cb2-45"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
-<span id="cb2-46"><a href="#cb2-46"></a><span class="co">#&gt; # A tibble: 4 x 6</span></span>
-<span id="cb2-47"><a href="#cb2-47"></a><span class="co">#&gt;   ID      length_km slope_percent main_id                            geom toID  </span></span>
-<span id="cb2-48"><a href="#cb2-48"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;           &lt;MULTILINESTRING [°]&gt; &lt;chr&gt; </span></span>
-<span id="cb2-49"><a href="#cb2-49"></a><span class="co">#&gt; 1 waterb…      2.78       0.0163   2.50e8 Z ((-79.16244 35.98999 0, -79.… nexus…</span></span>
-<span id="cb2-50"><a href="#cb2-50"></a><span class="co">#&gt; 2 waterb…      1.78       0.00903  2.50e8 Z ((-79.13053 35.97413 0, -79.… nexus…</span></span>
-<span id="cb2-51"><a href="#cb2-51"></a><span class="co">#&gt; 3 waterb…      1.22       0.00424  2.50e8 Z ((-79.12653 35.9883 0, -79.1… nexus…</span></span>
-<span id="cb2-52"><a href="#cb2-52"></a><span class="co">#&gt; 4 waterb…      1.20       0.00652  2.50e8 Z ((-79.13963 35.98956 0, -79.… nexus…</span></span>
-<span id="cb2-53"><a href="#cb2-53"></a></span>
-<span id="cb2-54"><a href="#cb2-54"></a>(nexus_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_nexus_data.html">get_nexus_data</a></span>(nexus, catchment_edge_list, waterbody_edge_list))</span>
-<span id="cb2-55"><a href="#cb2-55"></a><span class="co">#&gt; Simple feature collection with 6 features and 2 fields</span></span>
-<span id="cb2-56"><a href="#cb2-56"></a><span class="co">#&gt; geometry type:  POINT</span></span>
-<span id="cb2-57"><a href="#cb2-57"></a><span class="co">#&gt; dimension:      XY</span></span>
-<span id="cb2-58"><a href="#cb2-58"></a><span class="co">#&gt; bbox:           xmin: -79.13963 ymin: 35.9883 xmax: -79.11841 ymax: 35.99613</span></span>
-<span id="cb2-59"><a href="#cb2-59"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
-<span id="cb2-60"><a href="#cb2-60"></a><span class="co">#&gt; # A tibble: 6 x 3</span></span>
-<span id="cb2-61"><a href="#cb2-61"></a><span class="co">#&gt;   ID                          geometry toID             </span></span>
-<span id="cb2-62"><a href="#cb2-62"></a><span class="co">#&gt;   &lt;chr&gt;                    &lt;POINT [°]&gt; &lt;chr&gt;            </span></span>
-<span id="cb2-63"><a href="#cb2-63"></a><span class="co">#&gt; 1 nexus_250031932 (-79.13963 35.98956) catchment_8895402</span></span>
-<span id="cb2-64"><a href="#cb2-64"></a><span class="co">#&gt; 2 nexus_250031932 (-79.13963 35.98956) waterbody_8895402</span></span>
-<span id="cb2-65"><a href="#cb2-65"></a><span class="co">#&gt; 3 nexus_250031930  (-79.12653 35.9883) catchment_8895396</span></span>
-<span id="cb2-66"><a href="#cb2-66"></a><span class="co">#&gt; 4 nexus_250031930  (-79.12653 35.9883) waterbody_8895396</span></span>
-<span id="cb2-67"><a href="#cb2-67"></a><span class="co">#&gt; 5 nexus_250031903 (-79.11841 35.99613) catchment_0      </span></span>
-<span id="cb2-68"><a href="#cb2-68"></a><span class="co">#&gt; 6 nexus_250031903 (-79.11841 35.99613) waterbody_0</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>catchment_prefix &lt;-<span class="st"> "catchment_"</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>nexus_prefix &lt;-<span class="st"> "nexus_"</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>waterbody_prefix &lt;-<span class="st"> "waterbody_"</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a>(catchment_edge_list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_catchment_edges.html">get_catchment_edges</a></span>(fline, </span>
+<span id="cb2-6"><a href="#cb2-6"></a>                                            <span class="dt">catchment_prefix =</span> catchment_prefix, </span>
+<span id="cb2-7"><a href="#cb2-7"></a>                                            <span class="dt">nexus_prefix =</span> nexus_prefix))</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; # A tibble: 7 x 2</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;   ID                toID             </span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; * &lt;chr&gt;             &lt;chr&gt;            </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 1 catchment_8895442 nexus_250031932  </span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; 2 catchment_8895520 nexus_250031930  </span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; 3 catchment_8895396 nexus_250031903  </span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; 4 catchment_8895402 nexus_250031930  </span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; 5 nexus_250031932   catchment_8895402</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; 6 nexus_250031930   catchment_8895396</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; 7 nexus_250031903   catchment_0</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19"></a>(waterbody_edge_list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_waterbody_edge_list.html">get_waterbody_edge_list</a></span>(fline, <span class="dt">waterbody_prefix =</span> waterbody_prefix))</span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt; Warning in prepare_nhdplus(fline, 0, 0, 0, FALSE, warn = FALSE): Got NHDPlus</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt; data without a Terminal catchment. Attempting to find it.</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt;   ID                toID             </span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;            </span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#&gt; 1 waterbody_8895442 waterbody_8895402</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; 2 waterbody_8895520 waterbody_8895396</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt; 3 waterbody_8895396 waterbody_0      </span></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#&gt; 4 waterbody_8895402 waterbody_8895396</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a></span>
+<span id="cb2-30"><a href="#cb2-30"></a>(catchment_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_catchment_data.html">get_catchment_data</a></span>(catchment, catchment_edge_list))</span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="co">#&gt; Simple feature collection with 4 features and 3 fields</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co">#&gt; geometry type:  MULTIPOLYGON</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="co">#&gt; dimension:      XY</span></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="co">#&gt; bbox:           xmin: -79.16293 ymin: 35.97214 xmax: -79.11032 ymax: 35.99623</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="co">#&gt;   ID         area_sqkm                                            geom toID     </span></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;                              &lt;MULTIPOLYGON [°]&gt; &lt;chr&gt;    </span></span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="co">#&gt; 1 catchment…      1.86 (((-79.15822 35.98449, -79.15997 35.98514, -79… nexus_25…</span></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="co">#&gt; 2 catchment…      1.28 (((-79.13297 35.97544, -79.13245 35.9787, -79.… nexus_25…</span></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="co">#&gt; 3 catchment…      2.12 (((-79.13297 35.97544, -79.13369 35.97596, -79… nexus_25…</span></span>
+<span id="cb2-42"><a href="#cb2-42"></a><span class="co">#&gt; 4 catchment…      1.77 (((-79.11932 35.98001, -79.12077 35.98198, -79… nexus_25…</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a></span>
+<span id="cb2-44"><a href="#cb2-44"></a>(waterbody_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_waterbody_data.html">get_waterbody_data</a></span>(fline, waterbody_edge_list) <span class="op">%&gt;%</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">realized_catchment =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(waterbody_prefix, </span>
+<span id="cb2-46"><a href="#cb2-46"></a>                                     catchment_prefix, ID)))</span>
+<span id="cb2-47"><a href="#cb2-47"></a><span class="co">#&gt; Simple feature collection with 4 features and 6 fields</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a><span class="co">#&gt; geometry type:  MULTILINESTRING</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a><span class="co">#&gt; dimension:      XYZ</span></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="co">#&gt; bbox:           xmin: -79.16244 ymin: 35.97413 xmax: -79.11841 ymax: 35.99613</span></span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="co">#&gt; z_range:        zmin: 0 zmax: 0</span></span>
+<span id="cb2-52"><a href="#cb2-52"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
+<span id="cb2-53"><a href="#cb2-53"></a><span class="co">#&gt; # A tibble: 4 x 7</span></span>
+<span id="cb2-54"><a href="#cb2-54"></a><span class="co">#&gt;   ID    length_km slope_percent main_id                      geom toID </span></span>
+<span id="cb2-55"><a href="#cb2-55"></a><span class="co">#&gt; * &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;     &lt;MULTILINESTRING [°]&gt; &lt;chr&gt;</span></span>
+<span id="cb2-56"><a href="#cb2-56"></a><span class="co">#&gt; 1 wate…      2.78       0.0163   2.50e8 Z ((-79.16244 35.98999 0… wate…</span></span>
+<span id="cb2-57"><a href="#cb2-57"></a><span class="co">#&gt; 2 wate…      1.78       0.00903  2.50e8 Z ((-79.13053 35.97413 0… wate…</span></span>
+<span id="cb2-58"><a href="#cb2-58"></a><span class="co">#&gt; 3 wate…      1.22       0.00424  2.50e8 Z ((-79.12653 35.9883 0,… wate…</span></span>
+<span id="cb2-59"><a href="#cb2-59"></a><span class="co">#&gt; 4 wate…      1.20       0.00652  2.50e8 Z ((-79.13963 35.98956 0… wate…</span></span>
+<span id="cb2-60"><a href="#cb2-60"></a><span class="co">#&gt; # … with 1 more variable: realized_catchment &lt;chr&gt;</span></span>
+<span id="cb2-61"><a href="#cb2-61"></a></span>
+<span id="cb2-62"><a href="#cb2-62"></a>(nexus_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_nexus_data.html">get_nexus_data</a></span>(nexus, catchment_edge_list, waterbody_edge_list))</span>
+<span id="cb2-63"><a href="#cb2-63"></a><span class="co">#&gt; Simple feature collection with 3 features and 2 fields</span></span>
+<span id="cb2-64"><a href="#cb2-64"></a><span class="co">#&gt; geometry type:  POINT</span></span>
+<span id="cb2-65"><a href="#cb2-65"></a><span class="co">#&gt; dimension:      XY</span></span>
+<span id="cb2-66"><a href="#cb2-66"></a><span class="co">#&gt; bbox:           xmin: -79.13963 ymin: 35.9883 xmax: -79.11841 ymax: 35.99613</span></span>
+<span id="cb2-67"><a href="#cb2-67"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
+<span id="cb2-68"><a href="#cb2-68"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb2-69"><a href="#cb2-69"></a><span class="co">#&gt;   ID                          geometry toID             </span></span>
+<span id="cb2-70"><a href="#cb2-70"></a><span class="co">#&gt;   &lt;chr&gt;                    &lt;POINT [°]&gt; &lt;chr&gt;            </span></span>
+<span id="cb2-71"><a href="#cb2-71"></a><span class="co">#&gt; 1 nexus_250031932 (-79.13963 35.98956) catchment_8895402</span></span>
+<span id="cb2-72"><a href="#cb2-72"></a><span class="co">#&gt; 2 nexus_250031930  (-79.12653 35.9883) catchment_8895396</span></span>
+<span id="cb2-73"><a href="#cb2-73"></a><span class="co">#&gt; 3 nexus_250031903 (-79.11841 35.99613) catchment_0</span></span></code></pre></div>
 <p>The outputs can be rendered into csv or json:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span>(catchment_edge_list, <span class="st">"catchment_edge_list.csv"</span>, </span>
 <span id="cb3-2"><a href="#cb3-2"></a>          <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</span>
