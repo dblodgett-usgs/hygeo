@@ -160,7 +160,7 @@ nexus <- get_nexus(reconcile,
 catchment_edge_list <- get_catchment_edges(reconcile,
                                            catchment_prefix = catchment_prefix,
                                            nexus_prefix = nexus_prefix)
-waterbody_edge_list <- get_waterbody_edge_list(catchment_edge_list,
+waterbody_edge_list <- get_waterbody_edge_list(reconcile,
                                                waterbody_prefix = waterbody_prefix)
 sqkm_per_sqm <- 1 / 1000^2
 
@@ -184,8 +184,6 @@ mapview::mapview(catchment_data, layer.name = "Catchment Area", col.regions = "t
   mapview::mapview(waterbody_data, layer.name = "Flowpaths", color = "blue") +
   mapview::mapview(nexus_data, layer.name = "Nexuses", cex = 3, color = "yellow4", col.regions = "yellow4") + 
   mapview::mapview(nwis_sites, layer.name = "NWIS Sites", cex = 6, color = "darkgrey", col.regions = "grey")
-
-
 ```
 
 The outputs can be rendered into csv or json:
