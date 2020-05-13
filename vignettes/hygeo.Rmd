@@ -82,22 +82,21 @@ waterbody_prefix <- "waterbody_"
 
 The outputs can be rendered into csv or json:
 ```{r output, eval=FALSE}
-write.csv(catchment_edge_list, "catchment_edge_list.csv", 
-          row.names = FALSE)
+hygeo_list <- list(catchment = catchment_data, 
+                   waterbody = waterbody_data, 
+                   nexus = nexus_data,
+                   catchment_edges = catchment_edge_list,
+                   waterbody_edges = waterbody_edge_list)
 
-jsonlite::write_json(catchment_edge_list, "catchment_edge_list.json", 
-                     pretty = TRUE)
+class(hygeo_list) <- "hygeo"
 
-write.csv(waterbody_edge_list, "waterbody_edge_list.csv", row.names = FALSE)
+temp_path <- file.path(tempdir(check = TRUE), "hygeo")
+dir.create(temp_path, recursive = TRUE, showWarnings = FALSE)
 
-jsonlite::write_json(waterbody_edge_list, "waterbody_edge_list.json", 
-                     pretty = TRUE)
+temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
 
-write_sf(catchment_data, "catchment_data.geojson")
+(hygeo_list_read <- read_hygeo(temp_path))
 
-write_sf(waterbody_data, "waterbody_data.geojson")
-
-write_sf(nexus_data, "nexus_data.geojson")
 ```
 
 ```{r teardown, include=FALSE}

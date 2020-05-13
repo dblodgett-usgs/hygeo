@@ -69,4 +69,33 @@ test_that("all functions run", {
                                waterbody_edge_list)
 
   expect_true("ID" %in% names(nexus))
+
+  hygeo_list <- list(catchment = catchment_data,
+                     waterbody = waterbody_data,
+                     nexus = nexus_data,
+                     catchment_edges = catchment_edge_list,
+                     waterbody_edges = waterbody_edge_list)
+
+  class(hygeo_list) <- "hygeo"
+
+  temp_path <- file.path(tempdir(check = TRUE), "hygeo")
+  unlink(temp_path, recursive = TRUE)
+  dir.create(temp_path, recursive = TRUE, showWarnings = FALSE)
+
+  temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
+
+  hygeo_list_read <- read_hygeo(temp_path)
+
+  expect_equal(names(hygeo_list), names(hygeo_list_read))
+
+  f <- function(x) {
+    try(x<- sf::st_drop_geometry(x), silent = TRUE)
+    names(x)
+  }
+
+  expect_equal(lapply(hygeo_list, f), lapply(hygeo_list_read, f))
+
+  expect_equal(lapply(hygeo_list, nrow), lapply(hygeo_list_read, nrow))
+
+  expect_equal(lapply(hygeo_list, ncol), lapply(hygeo_list_read, ncol))
 })
