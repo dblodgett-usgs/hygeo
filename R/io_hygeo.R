@@ -80,9 +80,8 @@ write_hygeo <- function(hygeo_list,
     write_sf(hygeo_list$catchment, cf, "catchment")
     write_sf(hygeo_list$waterbody, wf, "waterbody")
     write_sf(hygeo_list$nexus, nf, "nexus")
-  } else {
-    stop("data_format must be 'gejson' or 'gpkg'")
   }
+
   return(invisible(out_path))
 }
 
@@ -98,6 +97,13 @@ read_hygeo <- function(path) {
   catchment_file <- fs[grepl("catchment_data", fs)]
   waterbody_file <- fs[grepl("waterbody_data", fs)]
   nexus_file <- fs[grepl("nexus_data", fs)]
+
+  if(length(catchment_file) == 0) {
+    catchment_file <-
+      waterbody_file <-
+      nexus_file <- fs[grepl("hygeo.gpkg", fs)]
+  }
+
   catchment_edge_file <- fs[grepl("catchment_edge_list", fs)]
   waterbody_edge_file <- fs[grepl("waterbody_edge_list", fs)]
 
@@ -118,18 +124,14 @@ read_data <- function(f, layer = NULL) {
     read_sf(f, layer)
   } else if(grepl(".*geojson$", f)) {
     read_sf(f)
-  } else {
-    stop(paste("expected gpkg or geojson in", f))
   }
 }
 
 read_edges <- function(f) {
   if(grepl(".*csv$", f)) {
-    read.csv(f, row.names = FALSE, stringsAsFactors = FALSE)
+    read.csv(f, stringsAsFactors = FALSE)
   } else if(grepl(".*json$", f)) {
     jsonlite::read_json(f, simplifyVector = TRUE)
-  } else {
-    stop(paste("expected csv or json in", f))
   }
 }
 
@@ -142,6 +144,3 @@ check_hygeo <- function(hygeo_list) {
                                                         paste(req_names, collapse = ", ")))
   return(invisible(NULL))
 }
-
-
-

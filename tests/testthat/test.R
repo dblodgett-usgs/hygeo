@@ -72,6 +72,8 @@ test_that("all functions run", {
 
   temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
 
+  temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
+
   expect_error(write_hygeo(hygeo_list, out_path = temp_path,
                                         overwrite = FALSE),
                "overwrite is FALSE and files exist")
@@ -98,6 +100,42 @@ test_that("all functions run", {
                            edge_list_format = "csv", data_format = "gpkg",
                            overwrite = TRUE)
 
+  temp_path <- write_hygeo(hygeo_list, out_path = temp_path,
+                           edge_list_format = "csv", data_format = "gpkg",
+                           overwrite = TRUE)
+
   expect_equal(list.files(temp_path),
                c("catchment_edge_list.csv", "hygeo.gpkg", "waterbody_edge_list.csv"))
+
+  hygeo_list_read <- read_hygeo(temp_path)
+
+  expect_equal(names(hygeo_list), names(hygeo_list_read))
+
+  expect_equal(lapply(hygeo_list, f), lapply(hygeo_list_read, f))
+
+  expect_equal(lapply(hygeo_list, nrow), lapply(hygeo_list_read, nrow))
+
+  expect_equal(lapply(hygeo_list, ncol), lapply(hygeo_list_read, ncol))
+
+  expect_error(write_hygeo(hygeo_list, out_path = temp_path,
+                           edge_list_format = "gpkg"),
+               'edge_list_format "gpkg" not implemented yet')
+  expect_error(write_hygeo(hygeo_list, out_path = temp_path,
+                           edge_list_format = "borked"),
+               "edge_list_format must be 'csv', 'gpkg', or 'json'")
+  expect_error(write_hygeo(hygeo_list, out_path = temp_path,
+                           data_format = "borked"),
+               "data_format must be 'gejson' or 'gpkg'")
+  class(hygeo_list) <- "borked"
+  expect_error(write_hygeo(hygeo_list, out_path = temp_path,
+                           edge_list_format = "csv", data_format = "gpkg",
+                           overwrite = TRUE),
+               "hygeo_list must be class 'hygeo'")
+  class(hygeo_list) <- "hygeo"
+  names(hygeo_list)[1] <- "borked"
+  expect_error(write_hygeo(hygeo_list, out_path = temp_path,
+                           edge_list_format = "csv", data_format = "gpkg",
+                           overwrite = TRUE),
+               "hygeo_list must contain all of catchment, waterbody, nexus, catchment_edges, waterbody_edges")
+
 })
