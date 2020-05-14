@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get catchment data — get_catchment_data • hygeo</title>
+<title>Write hygeo — write_hygeo • hygeo</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="get catchment data — get_catchment_data" />
-<meta property="og:description" content="get catchment data" />
+<meta property="og:title" content="Write hygeo — write_hygeo" />
+<meta property="og:description" content="Write hygeo" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,36 +120,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>get catchment data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dblodgett-usgs/hygeo/blob/master/R/functions.R'><code>R/functions.R</code></a></small>
-    <div class="hidden name"><code>get_catchment_data.Rd</code></div>
+    <h1>Write hygeo</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dblodgett-usgs/hygeo/blob/master/R/io_hygeo.R'><code>R/io_hygeo.R</code></a></small>
+    <div class="hidden name"><code>write_hygeo.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>get catchment data</p>
+    <p>Write hygeo</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_catchment_data</span>(
-  <span class='no'>catchment</span>,
-  <span class='no'>catchment_edge_list</span>,
-  <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment_"</span>
+    <pre class="usage"><span class='fu'>write_hygeo</span>(
+  <span class='no'>hygeo_list</span>,
+  <span class='no'>out_path</span>,
+  <span class='kw'>edge_list_format</span> <span class='kw'>=</span> <span class='st'>"json"</span>,
+  <span class='kw'>data_format</span> <span class='kw'>=</span> <span class='st'>"geojson"</span>,
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>catchment</th>
-      <td><p>sf data.frame NHDPlus Catchments or hyRefactor output.</p></td>
+      <th>hygeo_list</th>
+      <td><p>list of class hygeo containing:
+catchment, waterbody, nexus, catchment_edges, and waterbody_edges.</p></td>
     </tr>
     <tr>
-      <th>catchment_edge_list</th>
-      <td><p>data.frame edge list of connections
-to/from catchments</p></td>
+      <th>out_path</th>
+      <td><p>character path to store outputs</p></td>
     </tr>
     <tr>
-      <th>catchment_prefix</th>
-      <td><p>character prefix for catchment IDs</p></td>
+      <th>edge_list_format</th>
+      <td><p>character 'json' or 'csv'</p></td>
+    </tr>
+    <tr>
+      <th>data_format</th>
+      <td><p>character 'geojson' or 'gpkg'</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>boolean overwrite output or not</p></td>
     </tr>
     </table>
 

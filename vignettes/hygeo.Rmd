@@ -81,7 +81,7 @@ waterbody_prefix <- "waterbody_"
 ```
 
 The outputs can be rendered into csv or json:
-```{r output, eval=FALSE}
+```{r output, eval=TRUE}
 hygeo_list <- list(catchment = catchment_data, 
                    waterbody = waterbody_data, 
                    nexus = nexus_data,

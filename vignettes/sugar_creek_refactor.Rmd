@@ -187,24 +187,23 @@ mapview::mapview(catchment_data, layer.name = "Catchment Area", col.regions = "t
 ```
 
 The outputs can be rendered into csv or json:
-```{r output, eval=FALSE}
+```{r output, eval=TRUE}
 
-jsonlite::write_json(catchment_edge_list, "catchment_edge_list.json", 
-                     pretty = TRUE)
+hygeo_list <- list(catchment = catchment_data, 
+                   waterbody = waterbody_data, 
+                   nexus = nexus_data,
+                   catchment_edges = catchment_edge_list,
+                   waterbody_edges = waterbody_edge_list)
 
-jsonlite::write_json(waterbody_edge_list, "waterbody_edge_list.json", 
-                     pretty = TRUE)
+class(hygeo_list) <- "hygeo"
 
-jsonlite::write_json(nhd_crosswalk, "crosswalk.json", 
-                     pretty = TRUE)
+temp_path <- file.path(tempdir(check = TRUE), "hygeo")
+dir.create(temp_path, recursive = TRUE, showWarnings = FALSE)
 
-write_sf(st_transform(catchment_data, 4326), "catchment_data.geojson")
+temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
 
-write_sf(st_transform(waterbody_data, 4326), "waterbody_data.geojson")
+(hygeo_list_read <- read_hygeo(temp_path))
 
-write_sf(st_transform(nexus_data, 4326), "nexus_data.geojson")
-
-write_sf(st_transform(nwis_sites, 4326), "nwis_sites.geojson")
 ```
 
 If needed, we can further break up the flowline network ensuring the outlets in the catchment network are included.
