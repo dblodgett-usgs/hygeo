@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hygeo</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.1</span>
       </span>
     </div>
 
@@ -245,51 +245,50 @@
 <span id="cb3-29"><a href="#cb3-29"></a><span class="co">#&gt; $waterbody</span></span>
 <span id="cb3-30"><a href="#cb3-30"></a><span class="co">#&gt; Simple feature collection with 4 features and 6 fields</span></span>
 <span id="cb3-31"><a href="#cb3-31"></a><span class="co">#&gt; geometry type:  MULTILINESTRING</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt; dimension:      XYZ</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt; dimension:      XY</span></span>
 <span id="cb3-33"><a href="#cb3-33"></a><span class="co">#&gt; bbox:           xmin: -79.16244 ymin: 35.97413 xmax: -79.11841 ymax: 35.99613</span></span>
-<span id="cb3-34"><a href="#cb3-34"></a><span class="co">#&gt; z_range:        zmin: 0 zmax: 0</span></span>
-<span id="cb3-35"><a href="#cb3-35"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="co">#&gt; # A tibble: 4 x 7</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a><span class="co">#&gt;   ID    length_km slope_percent main_id toID  realized_catchm…</span></span>
-<span id="cb3-38"><a href="#cb3-38"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
-<span id="cb3-39"><a href="#cb3-39"></a><span class="co">#&gt; 1 wate…      2.78       0.0163   2.50e8 wate… catchment_88954…</span></span>
-<span id="cb3-40"><a href="#cb3-40"></a><span class="co">#&gt; 2 wate…      1.78       0.00903  2.50e8 wate… catchment_88955…</span></span>
-<span id="cb3-41"><a href="#cb3-41"></a><span class="co">#&gt; 3 wate…      1.22       0.00424  2.50e8 wate… catchment_88953…</span></span>
-<span id="cb3-42"><a href="#cb3-42"></a><span class="co">#&gt; 4 wate…      1.20       0.00652  2.50e8 wate… catchment_88954…</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a><span class="co">#&gt; # … with 1 more variable: geometry &lt;MULTILINESTRING [°]&gt;</span></span>
-<span id="cb3-44"><a href="#cb3-44"></a><span class="co">#&gt; </span></span>
-<span id="cb3-45"><a href="#cb3-45"></a><span class="co">#&gt; $nexus</span></span>
-<span id="cb3-46"><a href="#cb3-46"></a><span class="co">#&gt; Simple feature collection with 3 features and 2 fields</span></span>
-<span id="cb3-47"><a href="#cb3-47"></a><span class="co">#&gt; geometry type:  POINT</span></span>
-<span id="cb3-48"><a href="#cb3-48"></a><span class="co">#&gt; dimension:      XY</span></span>
-<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#&gt; bbox:           xmin: -79.13963 ymin: 35.9883 xmax: -79.11841 ymax: 35.99613</span></span>
-<span id="cb3-50"><a href="#cb3-50"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
-<span id="cb3-51"><a href="#cb3-51"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
-<span id="cb3-52"><a href="#cb3-52"></a><span class="co">#&gt;   ID              toID                          geometry</span></span>
-<span id="cb3-53"><a href="#cb3-53"></a><span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;                      &lt;POINT [°]&gt;</span></span>
-<span id="cb3-54"><a href="#cb3-54"></a><span class="co">#&gt; 1 nexus_250031932 catchment_8895402 (-79.13963 35.98956)</span></span>
-<span id="cb3-55"><a href="#cb3-55"></a><span class="co">#&gt; 2 nexus_250031930 catchment_8895396  (-79.12653 35.9883)</span></span>
-<span id="cb3-56"><a href="#cb3-56"></a><span class="co">#&gt; 3 nexus_250031903 catchment_0       (-79.11841 35.99613)</span></span>
-<span id="cb3-57"><a href="#cb3-57"></a><span class="co">#&gt; </span></span>
-<span id="cb3-58"><a href="#cb3-58"></a><span class="co">#&gt; $catchment_edges</span></span>
-<span id="cb3-59"><a href="#cb3-59"></a><span class="co">#&gt;                  ID              toID</span></span>
-<span id="cb3-60"><a href="#cb3-60"></a><span class="co">#&gt; 1 catchment_8895442   nexus_250031932</span></span>
-<span id="cb3-61"><a href="#cb3-61"></a><span class="co">#&gt; 2 catchment_8895520   nexus_250031930</span></span>
-<span id="cb3-62"><a href="#cb3-62"></a><span class="co">#&gt; 3 catchment_8895396   nexus_250031903</span></span>
-<span id="cb3-63"><a href="#cb3-63"></a><span class="co">#&gt; 4 catchment_8895402   nexus_250031930</span></span>
-<span id="cb3-64"><a href="#cb3-64"></a><span class="co">#&gt; 5   nexus_250031932 catchment_8895402</span></span>
-<span id="cb3-65"><a href="#cb3-65"></a><span class="co">#&gt; 6   nexus_250031930 catchment_8895396</span></span>
-<span id="cb3-66"><a href="#cb3-66"></a><span class="co">#&gt; 7   nexus_250031903       catchment_0</span></span>
-<span id="cb3-67"><a href="#cb3-67"></a><span class="co">#&gt; </span></span>
-<span id="cb3-68"><a href="#cb3-68"></a><span class="co">#&gt; $waterbody_edges</span></span>
-<span id="cb3-69"><a href="#cb3-69"></a><span class="co">#&gt;                  ID              toID</span></span>
-<span id="cb3-70"><a href="#cb3-70"></a><span class="co">#&gt; 1 waterbody_8895442 waterbody_8895402</span></span>
-<span id="cb3-71"><a href="#cb3-71"></a><span class="co">#&gt; 2 waterbody_8895520 waterbody_8895396</span></span>
-<span id="cb3-72"><a href="#cb3-72"></a><span class="co">#&gt; 3 waterbody_8895396       waterbody_0</span></span>
-<span id="cb3-73"><a href="#cb3-73"></a><span class="co">#&gt; 4 waterbody_8895402 waterbody_8895396</span></span>
-<span id="cb3-74"><a href="#cb3-74"></a><span class="co">#&gt; </span></span>
-<span id="cb3-75"><a href="#cb3-75"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb3-76"><a href="#cb3-76"></a><span class="co">#&gt; [1] "hygeo"</span></span></code></pre></div>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="co">#&gt; # A tibble: 4 x 7</span></span>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="co">#&gt;   ID    length_km slope_percent main_id toID  realized_catchm…</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="co">#&gt; 1 wate…      2.78       0.0163   2.50e8 wate… catchment_88954…</span></span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="co">#&gt; 2 wate…      1.78       0.00903  2.50e8 wate… catchment_88955…</span></span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="co">#&gt; 3 wate…      1.22       0.00424  2.50e8 wate… catchment_88953…</span></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="co">#&gt; 4 wate…      1.20       0.00652  2.50e8 wate… catchment_88954…</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="co">#&gt; # … with 1 more variable: geometry &lt;MULTILINESTRING [°]&gt;</span></span>
+<span id="cb3-43"><a href="#cb3-43"></a><span class="co">#&gt; </span></span>
+<span id="cb3-44"><a href="#cb3-44"></a><span class="co">#&gt; $nexus</span></span>
+<span id="cb3-45"><a href="#cb3-45"></a><span class="co">#&gt; Simple feature collection with 3 features and 2 fields</span></span>
+<span id="cb3-46"><a href="#cb3-46"></a><span class="co">#&gt; geometry type:  POINT</span></span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="co">#&gt; dimension:      XY</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="co">#&gt; bbox:           xmin: -79.13963 ymin: 35.9883 xmax: -79.11841 ymax: 35.99613</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#&gt; geographic CRS: WGS 84</span></span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb3-51"><a href="#cb3-51"></a><span class="co">#&gt;   ID              toID                          geometry</span></span>
+<span id="cb3-52"><a href="#cb3-52"></a><span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;                      &lt;POINT [°]&gt;</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a><span class="co">#&gt; 1 nexus_250031932 catchment_8895402 (-79.13963 35.98956)</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a><span class="co">#&gt; 2 nexus_250031930 catchment_8895396  (-79.12653 35.9883)</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a><span class="co">#&gt; 3 nexus_250031903 catchment_0       (-79.11841 35.99613)</span></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="co">#&gt; </span></span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="co">#&gt; $catchment_edges</span></span>
+<span id="cb3-58"><a href="#cb3-58"></a><span class="co">#&gt;                  ID              toID</span></span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="co">#&gt; 1 catchment_8895442   nexus_250031932</span></span>
+<span id="cb3-60"><a href="#cb3-60"></a><span class="co">#&gt; 2 catchment_8895520   nexus_250031930</span></span>
+<span id="cb3-61"><a href="#cb3-61"></a><span class="co">#&gt; 3 catchment_8895396   nexus_250031903</span></span>
+<span id="cb3-62"><a href="#cb3-62"></a><span class="co">#&gt; 4 catchment_8895402   nexus_250031930</span></span>
+<span id="cb3-63"><a href="#cb3-63"></a><span class="co">#&gt; 5   nexus_250031932 catchment_8895402</span></span>
+<span id="cb3-64"><a href="#cb3-64"></a><span class="co">#&gt; 6   nexus_250031930 catchment_8895396</span></span>
+<span id="cb3-65"><a href="#cb3-65"></a><span class="co">#&gt; 7   nexus_250031903       catchment_0</span></span>
+<span id="cb3-66"><a href="#cb3-66"></a><span class="co">#&gt; </span></span>
+<span id="cb3-67"><a href="#cb3-67"></a><span class="co">#&gt; $waterbody_edges</span></span>
+<span id="cb3-68"><a href="#cb3-68"></a><span class="co">#&gt;                  ID              toID</span></span>
+<span id="cb3-69"><a href="#cb3-69"></a><span class="co">#&gt; 1 waterbody_8895442 waterbody_8895402</span></span>
+<span id="cb3-70"><a href="#cb3-70"></a><span class="co">#&gt; 2 waterbody_8895520 waterbody_8895396</span></span>
+<span id="cb3-71"><a href="#cb3-71"></a><span class="co">#&gt; 3 waterbody_8895396       waterbody_0</span></span>
+<span id="cb3-72"><a href="#cb3-72"></a><span class="co">#&gt; 4 waterbody_8895402 waterbody_8895396</span></span>
+<span id="cb3-73"><a href="#cb3-73"></a><span class="co">#&gt; </span></span>
+<span id="cb3-74"><a href="#cb3-74"></a><span class="co">#&gt; attr(,"class")</span></span>
+<span id="cb3-75"><a href="#cb3-75"></a><span class="co">#&gt; [1] "hygeo"</span></span></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
