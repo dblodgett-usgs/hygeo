@@ -20,4 +20,8 @@ check_io <- function(hygeo_list, temp_path){
   expect_equal(lapply(hygeo_list, nrow), lapply(hygeo_list_read, nrow))
 
   expect_equal(lapply(hygeo_list, ncol), lapply(hygeo_list_read, ncol))
+
+  expect_true(all(sf::st_is_valid(hygeo_list$catchment)))
+  expect_true(all(sf::st_is_valid(hygeo_list$waterbody)))
+  expect_true(all(sf::st_is_valid(hygeo_list$nexus)))
 }

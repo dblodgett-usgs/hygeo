@@ -6,7 +6,7 @@
 #' @param data_format character 'geojson' or 'gpkg'
 #' @param overwrite boolean overwrite output or not
 #' @importFrom utils write.csv
-#' @importFrom sf write_sf
+#' @importFrom sf write_sf st_make_valid
 #' @export
 write_hygeo <- function(hygeo_list,
                         out_path,
@@ -69,17 +69,17 @@ write_hygeo <- function(hygeo_list,
     wf <- file.path(out_path, "waterbody_data.geojson")
     nf <- file.path(out_path, "nexus_data.geojson")
 
-    write_sf(hygeo_list$catchment, cf)
-    write_sf(hygeo_list$waterbody, wf)
-    write_sf(hygeo_list$nexus, nf)
+    write_sf(st_make_valid(hygeo_list$catchment), cf)
+    write_sf(st_make_valid(hygeo_list$waterbody), wf)
+    write_sf(st_make_valid(hygeo_list$nexus), nf)
   } else if(data_format == "gpkg") {
     cf <- file.path(out_path, "hygeo.gpkg")
     wf <- file.path(out_path, "hygeo.gpkg")
     nf <- file.path(out_path, "hygeo.gpkg")
 
-    write_sf(hygeo_list$catchment, cf, "catchment")
-    write_sf(hygeo_list$waterbody, wf, "waterbody")
-    write_sf(hygeo_list$nexus, nf, "nexus")
+    write_sf(st_make_valid(hygeo_list$catchment), cf, "catchment")
+    write_sf(st_make_valid(hygeo_list$waterbody), wf, "waterbody")
+    write_sf(st_make_valid(hygeo_list$nexus), nf, "nexus")
   }
 
   return(invisible(out_path))
