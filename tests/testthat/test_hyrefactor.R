@@ -98,4 +98,9 @@ test_that("io_functions", {
   expect_equal(lapply(hygeo_list, nrow), lapply(hygeo_list_read, nrow))
 
   expect_equal(lapply(hygeo_list, ncol), lapply(hygeo_list_read, ncol))
+
+  expect_true(mean(st_coordinates(hygeo_list_read$catchment)[, 1]) < 180,
+              "coordinates not lat/lon?")
+  expect_true(mean(st_coordinates(hygeo_list_read$catchment)[, 2]) < 180,
+              "coordinates not lat/lon?")
 })
