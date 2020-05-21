@@ -33,11 +33,11 @@ src_gpkg <- system.file("gpkg/sugar_creek_fort_mill.gpkg", package = "hygeo")
 fdr_tif <- system.file("tiff/sugar_creek_fort_mill_fdr.tif", package = "hygeo")
 fac_tif <- system.file("tiff/sugar_creek_fort_mill_fac.tif", package = "hygeo")
 collapsed <- tempfile(fileext = ".gpkg")
-collapsed_small <- tempfile(fileext = ".gpkg")
+refactored_small <- tempfile(fileext = ".gpkg")
 reconciled <- tempfile(fileext = ".gpkg")
 reconciled_small <- tempfile(fileext = ".gpkg")
 
-unlink(c(collapsed, collapsed_small, reconciled, reconciled_small), force = TRUE)
+unlink(c(collapsed, refactored_small, reconciled, reconciled_small), force = TRUE)
 
 catchment_prefix <- "cat-"
 waterbody_prefix <- "wat-"
@@ -89,7 +89,7 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              split_flines_cores = 10000,
                              collapse_flines_meters = 1000,
                              collapse_flines_main_meters = 1000,
-                             out_collapsed = collapsed,
+                             out_refactored = collapsed,
                              out_reconciled = reconciled,
                              three_pass = TRUE,
                              purge_non_dendritic = FALSE, 
@@ -145,7 +145,6 @@ nhd_crosswalk <- sf::st_drop_geometry(reconcile) %>%
   select(local_id, COMID = member_COMID) %>%
   left_join(dplyr::select(sf::st_drop_geometry(nwis_sites), 
                           site_no, local_id), by = "local_id")
-  
 ```
 ```{r, eval=FALSE, include=FALSE}
 write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
@@ -201,6 +200,7 @@ temp_path <- file.path(tempdir(check = TRUE), "hygeo")
 dir.create(temp_path, recursive = TRUE, showWarnings = FALSE)
 
 temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
+jsonlite::write_json(nhd_crosswalk, file.path(temp_path, "crosswalk.json"))
 
 (hygeo_list_read <- read_hygeo(temp_path))
 
@@ -224,7 +224,7 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              collapse_flines_meters = 400,
                              collapse_flines_main_meters = 400,
                              exclude_cats = outlet_comids$member_COMID,
-                             out_collapsed = collapsed_small,
+                             out_refactored = refactored_small,
                              out_reconciled = reconciled_small,
                              three_pass = TRUE,
                              purge_non_dendritic = FALSE)
