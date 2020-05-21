@@ -10,7 +10,7 @@ Description: hygeo generates inputs for the Next Generation Water Modeling Engin
 URL: https://github.com/dblodgett-usgs/hygeo
 BugReports: https://github.com/dblodgett-usgs/hygeo/issues
 Imports: dplyr, sf, magrittr, nhdplusTools, methods
-Suggests: knitr, testthat, hyRefactor, jsonlite, mapview, dataRetrieval, raster, tidyr
+Suggests: knitr, testthat, hyRefactor, jsonlite, mapview, dataRetrieval, raster, tidyr, lwgeom
 License: CC0
 Encoding: UTF-8
 LazyData: true
