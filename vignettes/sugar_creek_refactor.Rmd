@@ -85,8 +85,8 @@ plot(st_transform(nwis_sites$geometry, 3857), pch = 24, bg = "darkgrey", add = T
 
 ```{r, eval=TRUE}
 hyRefactor::refactor_nhdplus(nhd$flowline,
-                             split_flines_meters = 10000,
-                             split_flines_cores = 10000,
+                             split_flines_meters = 5000,
+                             split_flines_cores = 2,
                              collapse_flines_meters = 1000,
                              collapse_flines_main_meters = 1000,
                              out_refactored = collapsed,
