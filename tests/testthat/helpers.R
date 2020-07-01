@@ -25,3 +25,48 @@ check_io <- function(hygeo_list, temp_path){
   expect_true(all(sf::st_is_valid(hygeo_list$waterbody)))
   expect_true(all(sf::st_is_valid(hygeo_list$nexus)))
 }
+
+get_test_hygoeo_object <- function() {
+  sample_data <- list.files(pattern = "sugar_creek_hyRefactor.gpkg", recursive = TRUE)[1]
+
+  fline <- read_sf(sample_data, "reconcile")
+
+  catchment <- read_sf(sample_data, "reconcile_divides")
+
+  nexus <- get_nexus(fline)
+
+  catchment_edge_list <- get_catchment_edges(fline,
+                                             catchment_prefix = "cat-",
+                                             nexus_prefix = "nex-")
+
+
+  waterbody_edge_list <- get_waterbody_edge_list(fline,
+                                                 waterbody_prefix = "wat-")
+
+
+
+  sqkm_per_sqm <- 1 / 1000^2
+  catchment$area_sqkm <- as.numeric(sf::st_area(sf::st_transform(catchment, 5070))) * sqkm_per_sqm
+
+  catchment_data <- get_catchment_data(catchment,
+                                       catchment_edge_list,
+                                       catchment_prefix = "cat-")
+
+  waterbody_data <- get_waterbody_data(fline,
+                                       waterbody_edge_list,
+                                       waterbody_prefix = "wat-")
+
+  nexus_data <- get_nexus_data(nexus,
+                               catchment_edge_list,
+                               waterbody_edge_list)
+
+  hygeo_list <- list(catchment = catchment_data,
+                     waterbody = waterbody_data,
+                     nexus = nexus_data,
+                     catchment_edges = catchment_edge_list,
+                     waterbody_edges = waterbody_edge_list)
+
+  class(hygeo_list) <- "hygeo"
+
+  return(list(hl = hygeo_list, fline = fline, cat = catchment))
+}

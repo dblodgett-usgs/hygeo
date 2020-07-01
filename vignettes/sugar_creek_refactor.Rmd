@@ -137,14 +137,7 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              fline_rec = reconcile,
                                                              para = 1)
 
-nhd_crosswalk <- sf::st_drop_geometry(reconcile) %>%
-  dplyr::select(ID, member_COMID) %>%
-  mutate(member_COMID = strsplit(reconcile$member_COMID, ",")) %>%
-  tidyr::unnest(cols = c("member_COMID")) %>%
-  mutate(local_id = paste0(waterbody_prefix, ID)) %>%
-  select(local_id, COMID = member_COMID) %>%
-  left_join(dplyr::select(sf::st_drop_geometry(nwis_sites), 
-                          site_no, local_id), by = "local_id")
+nhd_crosswalk <- get_nhd_crosswalk(reconcile, waterbody_prefix) 
 ```
 ```{r, eval=FALSE, include=FALSE}
 write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")

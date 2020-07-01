@@ -167,3 +167,19 @@ get_nexus_data <- function(nexus, catchment_edge_list, waterbody_edge_list) {
   select(nexus, .data$ID) %>%
     left_join(rbind(catchment_edge_list, waterbody_edge_list), by = "ID")
 }
+
+#' Get NHD Crosswalk
+#' @param x sf ata.frame output from reconcile_collapsed_flowlines() function
+#' @param waterbody_prefix character prefix to be appended to local_id output.
+#' @export
+#' @importFrom sf st_drop_geometry
+#' @importFrom dplyr select mutate
+#' @importFrom tidyr unnest
+get_nhd_crosswalk <- function(x, waterbody_prefix = "wat-") {
+  st_drop_geometry(x) %>%
+    select(ID, member_COMID) %>%
+    mutate(member_COMID = strsplit(member_COMID, ",")) %>%
+    unnest(cols = c("member_COMID")) %>%
+    mutate(local_id = paste0(waterbody_prefix, ID)) %>%
+    select(local_id, COMID = member_COMID)
+}
