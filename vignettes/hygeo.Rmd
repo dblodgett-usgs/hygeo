@@ -18,6 +18,7 @@ eval=nzchar(Sys.getenv("BUILD_VIGNETTES"))
 )
 oldoption <- options(scipen = 9999)
 options(scipen = 9999)
+options("rgdal_show_exportToProj4_warnings"="none")
 ```
 
 The following example shows how to work with data following the NHDPlusV2 schema.

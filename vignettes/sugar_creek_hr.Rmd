@@ -1,0 +1,92 @@
+---
+title: "NHDPlusHR with hygeo output"
+author: "dblodgett@usgs.gov"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{nhdplushr_demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6,
+  fig.height=4
+)
+oldoption <- options(scipen = 9999)
+options(scipen = 9999)
+options("rgdal_show_exportToProj4_warnings"="none")
+```
+
+First, we'll load up three data sets. 
+1. the mainstem identifiers from NHDPlusV2 (LevelPathIDs)
+2. NHDPlusHR Flowlines which have the NHDPlusV2 LevelPathID as an attribute.
+3. Reconciled flowline output from the processing shown in `vignette("sugar_creek_refactor")`
+
+```{r load_data}
+library(nhdplusTools)
+library(hyRefactor)
+library(sf)
+library(tidyr)
+library(dplyr)
+library(hygeo)
+src_gpkg <- system.file("gpkg/sugar_creek_fort_mill.gpkg", package = "hygeo")
+
+mr_lp <- st_drop_geometry(read_sf(src_gpkg, "NHDFlowline_Network")) %>%
+  select(COMID = comid, LevelPathI = levelpathi)
+
+hr_fline <- read_sf(src_gpkg, "hr_NHDPlusFlowline") %>%
+  select(NHDPlusID = COMID, LevelPathI, Hydroseq, mr_LevelPathI)
+
+fline <- read_sf("../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
+
+waterbody_edge_list <- get_waterbody_edge_list(fline,
+                                               waterbody_prefix = "wat-")
+waterbody <- get_waterbody_data(fline,
+                                waterbody_edge_list,
+                                waterbody_prefix = "wat-")
+```
+
+Given these three datasets we need to do a little manipulation to get the identifiers straight. 
+
+First we create a cross walk for mainstem ids. This is a little awkward. See: https://github.com/dblodgett-usgs/hyRefactor/issues/5 Using the cross walk, we can add attributes generate outlet node locations from the NHDPlusHR flowlines and add the mainstem identifier cross walk to them.
+```{r}
+main_id_xwalk <- select(st_drop_geometry(waterbody),
+                        local_id = ID, main_id) %>%
+  left_join(get_nhd_crosswalk(fline), by = "local_id") %>%
+  mutate(COMID = as.integer(COMID)) %>%
+  select(-local_id) %>%
+  distinct() %>%
+  left_join(mr_lp, by = "COMID") %>%
+  select(-COMID)
+
+hr_nodes <- st_sf(st_drop_geometry(hr_fline),
+                  geom =  st_geometry(nhdplusTools::get_node(hr_fline))) %>%
+  left_join(main_id_xwalk, by = c("mr_LevelPathI" = "LevelPathI"))
+```
+
+Now we just need to make sure things are in the project we want to use for analysis, the columns of the input points are right, and pass them in.
+```{r}
+hyl <- st_transform(select(hr_nodes, NHDPlusID, main_id), 5070)
+
+waterbody <- st_transform(waterbody, 5070)
+
+(hyl_out <- get_hydrologic_locaton(hyl, waterbody))
+```
+
+Now we can map up the matches we got.
+
+```{r}
+hr_matched <- filter(hr_fline, NHDPlusID %in% hyl_out$NHDPlusID)
+
+mapview::mapview(fline, lwd = 4, color = "blue", layer.name = "NHDPlusV2") + 
+  mapview::mapview(hr_matched, lwd = 3, color = "red", layer.name = "NHDPlusHR") +
+  mapview::mapview(hyl_out, cex = 2, color = "black", layer.name = ("NHDPlusHR Outlets"))
+
+```
+
+```{r teardown, include=FALSE, eval=TRUE}
+options(oldoption)
+```
