@@ -9,8 +9,9 @@ Authors@R: c(person(given = "David",
 Description: hygeo generates inputs for the Next Generation Water Modeling Engine and Framework Prototype project project.
 URL: https://github.com/dblodgett-usgs/hygeo
 BugReports: https://github.com/dblodgett-usgs/hygeo/issues
-Imports: dplyr, sf, magrittr, nhdplusTools, methods
-Suggests: knitr, testthat, hyRefactor, jsonlite, mapview, dataRetrieval, raster, tidyr, lwgeom
+Imports: dplyr, sf, magrittr, nhdplusTools, methods, tidyr
+Suggests: knitr, testthat, jsonlite, mapview, dataRetrieval, raster, lwgeom, hyRefactor
+Remotes: dblodgett-usgs/hyRefactor
 License: CC0
 Encoding: UTF-8
 LazyData: true

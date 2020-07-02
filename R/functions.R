@@ -177,9 +177,9 @@ get_nexus_data <- function(nexus, catchment_edge_list, waterbody_edge_list) {
 #' @importFrom tidyr unnest
 get_nhd_crosswalk <- function(x, waterbody_prefix = "wat-") {
   st_drop_geometry(x) %>%
-    select(ID, member_COMID) %>%
-    mutate(member_COMID = strsplit(member_COMID, ",")) %>%
+    select(.data$ID, .data$member_COMID) %>%
+    mutate(member_COMID = strsplit(.data$member_COMID, ",")) %>%
     unnest(cols = c("member_COMID")) %>%
-    mutate(local_id = paste0(waterbody_prefix, ID)) %>%
-    select(local_id, COMID = member_COMID)
+    mutate(local_id = paste0(waterbody_prefix, .data$ID)) %>%
+    select(local_id, COMID = .data$member_COMID)
 }
