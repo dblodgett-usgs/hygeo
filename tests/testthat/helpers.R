@@ -1,3 +1,8 @@
+
+library(nhdplusTools)
+library(dplyr)
+library(sf)
+
 get_hygeo_temp <- function() {
   temp_path <- file.path(tempdir(check = TRUE), "hygeo")
   unlink(temp_path, recursive = TRUE)

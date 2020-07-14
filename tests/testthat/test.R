@@ -1,9 +1,5 @@
 context("nhdplus tests")
 
-library(nhdplusTools)
-library(dplyr)
-library(sf)
-
 sample_data <- system.file("gpkg/nhdplus_subset.gpkg", package = "hygeo")
 
 fline <- read_sf(sample_data, "NHDFlowline_Network") %>%
