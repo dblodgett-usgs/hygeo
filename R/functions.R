@@ -181,5 +181,5 @@ get_nhd_crosswalk <- function(x, waterbody_prefix = "wat-") {
     mutate(member_COMID = strsplit(.data$member_COMID, ",")) %>%
     unnest(cols = c("member_COMID")) %>%
     mutate(local_id = paste0(waterbody_prefix, .data$ID)) %>%
-    select(local_id, COMID = .data$member_COMID)
+    select(.data$local_id, COMID = .data$member_COMID)
 }
