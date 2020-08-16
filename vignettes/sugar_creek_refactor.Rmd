@@ -6,6 +6,11 @@ vignette: >
   %\VignetteIndexEntry{hyRefactor demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+params:
+  out_path: !r file.path(tempdir(check = TRUE), "hygeo")
+  split_m: 5000
+  collapse_m: 1000
+  gage_tolerance: 25
 ---
 
 ```{r setup, include = FALSE}
@@ -84,7 +89,7 @@ all(nwis_sites$COMID %in% nhd$catchment$FEATUREID)
 
 # only chose sites that are 1/4 or more up the catchment.
 split_sites <- nwis_sites %>%
-  filter((100 * (REACH_meas - FromMeas) / (ToMeas - FromMeas)) > 25)
+  filter((100 * (REACH_meas - FromMeas) / (ToMeas - FromMeas)) > params$gage_tolerance)
 
 nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
@@ -96,10 +101,10 @@ plot(st_transform(nwis_sites$geometry, 3857), pch = 24, bg = "darkgrey", add = T
 
 ```{r, eval=TRUE}
 hyRefactor::refactor_nhdplus(nhd$flowline,
-                             split_flines_meters = 5000,
+                             split_flines_meters = params$split_m,
                              split_flines_cores = 2,
-                             collapse_flines_meters = 1000,
-                             collapse_flines_main_meters = 1000,
+                             collapse_flines_meters = params$collapse_m,
+                             collapse_flines_main_meters = params$collapse_m,
                              out_refactored = collapsed,
                              out_reconciled = reconciled,
                              three_pass = TRUE,
@@ -201,13 +206,13 @@ hygeo_list <- list(catchment = catchment_data,
 
 class(hygeo_list) <- "hygeo"
 
-temp_path <- file.path(tempdir(check = TRUE), "hygeo")
-dir.create(temp_path, recursive = TRUE, showWarnings = FALSE)
+out_path <- params$out_path
+dir.create(out_path, recursive = TRUE, showWarnings = FALSE)
 
-temp_path <- write_hygeo(hygeo_list, out_path = temp_path, overwrite = TRUE)
-jsonlite::write_json(nhd_crosswalk, file.path(temp_path, "crosswalk.json"))
+out_path <- write_hygeo(hygeo_list, out_path = out_path, overwrite = TRUE)
+jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"))
 
-(hygeo_list_read <- read_hygeo(temp_path))
+(hygeo_list_read <- read_hygeo(out_path))
 
 ```
 
