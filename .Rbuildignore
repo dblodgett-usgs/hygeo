@@ -8,3 +8,4 @@ DISCLAIMER
 _pkgdown.yml
 docs
 .*rosm.cache
+build
