@@ -6,7 +6,7 @@
 #' the mainstem id in the seccond column, and an sf_column in the third.
 #' @param waterbody the waterbody table of an hygeo object.
 #' @importFrom nhdplusTools get_flowline_index
-#' @importFrom dplyr bind_rows select rename mutate bind_cols
+#' @importFrom dplyr bind_rows select rename mutate bind_cols left_join
 #' @importFrom sf st_sf
 #' @return sf data.frame
 #' @export
@@ -39,7 +39,12 @@ link_by_path <- function(lp, hyl, waterbody, radius = 1000) {
 
   hyl <- hyl[hyl$main_id == lp, ]
 
+  indexes <- left_join(data.frame(id = seq_len(nrow(hyl))),
+                       nhdplusTools::get_flowline_index(waterbody, hyl, search_radius = radius),
+                       by = "id")
+  indexes <- select(indexes, -id)
+
   st_sf(bind_cols(hyl[, 1],
-                  nhdplusTools::get_flowline_index(waterbody, hyl, search_radius = radius)))
+                  indexes))
 }
 

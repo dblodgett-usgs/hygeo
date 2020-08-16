@@ -48,6 +48,7 @@ nexus_prefix <- "nex-"
 
 Now we will get some data and just plot up our area of interest.
 ```{r, eval=TRUE}
+options("rgdal_show_exportToProj4_warnings"="none")
 nhd <- nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
                                   overwrite = FALSE,
@@ -75,10 +76,15 @@ nwis_sites <-  bind_cols(nwis_sites,
                                      nwis_sites, search_radius = 50), by = "id")) %>%
   filter(!is.na(COMID)) %>%
   st_sf() %>%
-  select(site_no, COMID, offset)
+  select(site_no, COMID, REACHCODE, REACH_meas, offset) %>%
+  left_join(select(st_drop_geometry(nhd$flowline), COMID, FromMeas, ToMeas), by = "COMID")
 
 # Check if we have catchment polygons for all our gage outlets.
 all(nwis_sites$COMID %in% nhd$catchment$FEATUREID)
+
+# only chose sites that are 1/4 or more up the catchment.
+split_sites <- nwis_sites %>%
+  filter((100 * (REACH_meas - FromMeas) / (ToMeas - FromMeas)) > 25)
 
 nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
@@ -98,7 +104,8 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              out_reconciled = reconciled,
                              three_pass = TRUE,
                              purge_non_dendritic = FALSE, 
-                             exclude_cats = nwis_sites$COMID)
+                             events = split_sites,
+                             exclude_cats = nwis_sites$COMID[!nwis_sites$COMID %in% split_sites$COMID])
 
 collapse <- sf::read_sf(collapsed)
 reconcile <- sf::read_sf(reconciled)
