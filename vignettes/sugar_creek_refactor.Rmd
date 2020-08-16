@@ -66,9 +66,13 @@ what_nwis_data <- dataRetrieval::whatNWISdata(siteNumber = gsub("USGS-", "", nwi
 nwis_sites <- filter(what_nwis_data, parm_cd == "00060" & data_type_cd == "uv") %>%
   st_as_sf(coords = c("dec_long_va", "dec_lat_va"), 
                        crs = 4269) %>%
-  bind_cols(nhdplusTools::get_flowline_index(
-              st_transform(nhd$flowline, 5070), 
-              ., search_radius = 50)) %>%
+  st_transform(5070)
+
+nwis_sites <-  bind_cols(nwis_sites,
+                         left_join(data.frame(id = seq_len(nrow(nwis_sites))),
+                                   nhdplusTools::get_flowline_index(
+                                     st_transform(nhd$flowline, 5070), 
+                                     nwis_sites, search_radius = 50), by = "id")) %>%
   filter(!is.na(COMID)) %>%
   st_sf() %>%
   select(site_no, COMID, offset)
