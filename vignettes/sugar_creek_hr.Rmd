@@ -46,7 +46,7 @@ waterbody_edge_list <- get_waterbody_edge_list(fline,
                                                waterbody_prefix = "fp-")
 waterbody <- get_flowpath_data(fline,
                                 waterbody_edge_list,
-                                flowpath_prefix = "fp-")
+                                catchment_prefix = "cat-")
 ```
 
 Given these three datasets we need to do a little manipulation to get the identifiers straight. 

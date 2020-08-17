@@ -5,7 +5,7 @@
 \title{get_flowpath_data
 Adds flowpath realization geometry and attributes to catchments}
 \usage{
-get_flowpath_data(fline, catchment_edge_list, flowpath_prefix = "flowpath_")
+get_flowpath_data(fline, catchment_edge_list, catchment_prefix = "catchment_")
 }
 \arguments{
 \item{fline}{sf data.frame NHDPlus Flowlines or hyRefactor output.}

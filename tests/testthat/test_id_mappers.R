@@ -15,7 +15,7 @@ test_that("get_hydrologic_location integration test", {
 
   main_id_xwalk <- select(st_drop_geometry(hl$flowpath),
                           local_id = ID, main_id) %>%
-    left_join(get_nhd_crosswalk(fline), by = "local_id") %>%
+    left_join(get_nhd_crosswalk(fline, catchment_prefix = "cat-"), by = "local_id") %>%
     mutate(COMID = as.integer(COMID)) %>%
     select(-local_id) %>%
     distinct() %>%

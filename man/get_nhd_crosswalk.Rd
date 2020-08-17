@@ -4,12 +4,12 @@
 \alias{get_nhd_crosswalk}
 \title{Get NHD Crosswalk}
 \usage{
-get_nhd_crosswalk(x, flowpath_prefix = "fp-")
+get_nhd_crosswalk(x, catchment_prefix = "catchment_")
 }
 \arguments{
 \item{x}{sf data.frame output from reconcile_collapsed_flowlines() function}
 
-\item{flowpath_prefix}{character prefix to be appended to local_id output.}
+\item{catchment_prefix}{character prefix to be appended to local_id output.}
 }
 \description{
 Get NHD Crosswalk

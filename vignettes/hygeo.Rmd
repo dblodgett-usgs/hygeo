@@ -58,7 +58,7 @@ plot(st_transform(st_geometry(nexus), 3857), add = TRUE)
 ```
 
 
-Given the flowlines, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowlines in this case. Waterbodies are 1:1 with catchments in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.
+Given the flowpaths, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowpaths in this case. Waterbodies are 1:1 with flowpath catchment realizations in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.
 
 ```{r create_output, echo=TRUE, eval=TRUE}
 catchment_prefix <- "catchment_"

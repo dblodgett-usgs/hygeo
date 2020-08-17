@@ -25,7 +25,7 @@ suppressWarnings(waterbody_edge_list <- get_waterbody_edge_list(fline,
 
 flowpath_data <- get_flowpath_data(fline,
                                    waterbody_edge_list,
-                                   flowpath_prefix = "fp-")
+                                   catchment_prefix = "cat-")
 
 nexus_data <- get_nexus_data(nexus,
                              catchment_edge_list)

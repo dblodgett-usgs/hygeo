@@ -143,7 +143,7 @@ get_catchment_data <- function(catchment, catchment_edge_list,
 #' @importFrom dplyr select mutate left_join
 #' @export
 get_flowpath_data <- function(fline, catchment_edge_list,
-                               flowpath_prefix = "flowpath_") {
+                              catchment_prefix = "catchment_") {
 
   if("COMID" %in% names(fline)) fline <- rename(fline, ID = .data$COMID,
                                                 LevelPathID = .data$LevelPathI)
@@ -152,7 +152,7 @@ get_flowpath_data <- function(fline, catchment_edge_list,
          length_km = .data$LENGTHKM,
          slope_percent = .data$slope,
          main_id = .data$LevelPathID) %>%
-    mutate(ID = paste0(flowpath_prefix, .data$ID)) %>%
+    mutate(ID = paste0(catchment_prefix, .data$ID)) %>%
     left_join(catchment_edge_list, by = "ID")
 }
 
@@ -169,16 +169,16 @@ get_nexus_data <- function(nexus, catchment_edge_list) {
 
 #' Get NHD Crosswalk
 #' @param x sf data.frame output from reconcile_collapsed_flowlines() function
-#' @param flowpath_prefix character prefix to be appended to local_id output.
+#' @param catchment_prefix character prefix to be appended to local_id output.
 #' @export
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr unnest
-get_nhd_crosswalk <- function(x, flowpath_prefix = "fp-") {
+get_nhd_crosswalk <- function(x, catchment_prefix = "catchment_") {
   st_drop_geometry(x) %>%
     select(.data$ID, .data$member_COMID) %>%
     mutate(member_COMID = strsplit(.data$member_COMID, ",")) %>%
     unnest(cols = c("member_COMID")) %>%
-    mutate(local_id = paste0(flowpath_prefix, .data$ID)) %>%
+    mutate(local_id = paste0(catchment_prefix, .data$ID)) %>%
     select(.data$local_id, COMID = .data$member_COMID)
 }

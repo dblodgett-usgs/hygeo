@@ -49,7 +49,7 @@ test_that("all functions run", {
 
   expect_equal(nrow(xwalk), 130)
 
-  expect_equal(xwalk$local_id[1], "fp-1")
+  expect_equal(xwalk$local_id[1], "catchment_1")
 
   xwalk <- get_nhd_crosswalk(fline, "fp-test-")
 

@@ -46,7 +46,7 @@ reconciled_small <- tempfile(fileext = ".gpkg")
 unlink(c(collapsed, refactored_small, reconciled, reconciled_small), force = TRUE)
 
 catchment_prefix <- "cat-"
-waterbody_prefix <- "wat-"
+waterbody_prefix <- "fp-"
 nexus_prefix <- "nex-"
 
 ```
@@ -179,9 +179,9 @@ catchment_data <- get_catchment_data(reconcile_divides,
                                      catchment_edge_list,
                                      catchment_prefix = catchment_prefix)
 
-waterbody_data <- get_waterbody_data(reconcile,
+waterbody_data <- get_flowpath_data(reconcile,
                                      waterbody_edge_list,
-                                     waterbody_prefix = waterbody_prefix) %>%
+                                     flowpath_prefix = waterbody_prefix) %>%
       mutate(realized_catchment = gsub(waterbody_prefix, 
                                      catchment_prefix, ID))
 
@@ -214,6 +214,7 @@ jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"))
 
 (hygeo_list_read <- read_hygeo(out_path))
 
+nhd_crosswalk
 ```
 
 If needed, we can further break up the flowline network ensuring the outlets in the catchment network are included.
