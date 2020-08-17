@@ -2,11 +2,11 @@
 
 export(get_catchment_data)
 export(get_catchment_edges)
+export(get_flowpath_data)
 export(get_hydrologic_locaton)
 export(get_nexus)
 export(get_nexus_data)
 export(get_nhd_crosswalk)
-export(get_waterbody_data)
 export(get_waterbody_edge_list)
 export(read_hygeo)
 export(write_hygeo)

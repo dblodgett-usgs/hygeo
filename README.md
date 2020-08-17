@@ -18,27 +18,27 @@ Any catchment node of degree 1 with an outward edge is a headwater and degree 1 
 
 Any catchment node of degree 2 is a typical catchment that has a coincident set of (one or more) waterbodies in the waterbody graph.
 
-Using this graph scheme, headwater catchments contribute either to the upstream end of a river (flow path) or to the shore of a waterbody that breaks up the coverage of catchment areas.
+Using this graph scheme, headwater catchments contribute either to the upstream end of a river (flowpath) or to the shore of a waterbody that breaks up the coverage of catchment areas.
 
 **Data**  
 Two edge lists describing the graphs.
 
 ## Catchment:
-Every catchment has a catchment area realization. The catchment area would be implemented as a local water budget model which takes inputs from the atmosphere and non-surficial hydro geologic systems and contributes outputs to an outlet nexus. There is a potential to have a catchment contribute flow incrementally along the waterbody(ies) that flow through it but this would be an advanced case.
+Every catchment has a catchment area realization. The catchment area would be implemented as a local water budget model which takes inputs from the atmosphere and non-surficial hydro geologic systems and contributes outputs to an outlet nexus.
 
-Every catchment of degree 2 will have a flow path that has an association with an upstream and downstream extent of a hydrodynamic model represented as a waterbody.
+Every catchment of degree 2 will have a flowpath realization. The flowpath would be used to linearly reference hydrologic locations and could be used for hydrologic routing. Using a flowpath realization, waterbodies relate to a catchment at hydrologic locations.
 
 **Data**  
-Single valued catchment properties that correspond to catchment area.
+Single valued catchment properties and geometry that correspond to catchment area and flowpath. Modeled as two simple features tables -- one for catchment area and one for flowpath.
 
 ## Nexus:  
 All nexuses must be of degree 2 or more. A nexus can receive flow from one or more catchment and contribute it to one or more catchments.
 
 **Data**  
-An edge list between nexuses in the catchment graph. Edge list not required if shared nexus IDs are used.
+An edge list between nexuses in the catchment graph. A hydrologic location simple features table represents the nexuses and can be used to associate nexuses to waterbodies and flowpaths.
 
 ## Waterbodies 
-Waterbodies either reside over (rivers and floodplains) or break apart the catchment area coverage (large lakes). Flow can be passed from catchments to waterbodies at nexuses.
+Waterbodies either reside over (rivers and floodplains) or break apart the catchment area coverage (large lakes). Flow can be passed from catchments to waterbodies at nexuses. Waterbodies and catchments can also be associated through hydrologic locations along flowpaths.
 
 **Data**  
 Parameters of hydrodynamic model and/or storage discharge or reservoir operations.

@@ -14,7 +14,7 @@ write_hygeo(
 }
 \arguments{
 \item{hygeo_list}{list of class hygeo containing:
-catchment, waterbody, nexus, catchment_edges, and waterbody_edges.}
+catchment, flowpath, nexus, catchment_edges, and waterbody_edges.}
 
 \item{out_path}{character path to store outputs}
 

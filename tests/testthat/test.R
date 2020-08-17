@@ -21,18 +21,17 @@ catchment_data <- get_catchment_data(catchment,
                                      catchment_prefix = "cat-")
 
 suppressWarnings(waterbody_edge_list <- get_waterbody_edge_list(fline,
-                                                                waterbody_prefix = "wat-"))
+                                                                waterbody_prefix = "fp-"))
 
-waterbody_data <- get_waterbody_data(fline,
-                                     waterbody_edge_list,
-                                     waterbody_prefix = "wat-")
+flowpath_data <- get_flowpath_data(fline,
+                                   waterbody_edge_list,
+                                   flowpath_prefix = "fp-")
 
 nexus_data <- get_nexus_data(nexus,
-                             catchment_edge_list,
-                             waterbody_edge_list)
+                             catchment_edge_list)
 
 hygeo_list <- list(catchment = catchment_data,
-                   waterbody = waterbody_data,
+                   flowpath = flowpath_data,
                    nexus = nexus_data,
                    catchment_edges = catchment_edge_list,
                    waterbody_edges = waterbody_edge_list)
@@ -52,18 +51,18 @@ test_that("all functions run", {
 
   expect_warning(
   waterbody_edge_list <- get_waterbody_edge_list(fline,
-                                                 waterbody_prefix = "wat-"),
+                                                 waterbody_prefix = "fp-"),
   "Got NHDPlus data without a Terminal catchment. Attempting to find it.")
 
   expect_equal(names(waterbody_edge_list), c("ID", "toID"))
-  expect_equal(waterbody_edge_list$ID[1], "wat-8895442")
-  expect_equal(waterbody_edge_list$toID[1], "wat-8895402")
+  expect_equal(waterbody_edge_list$ID[1], "fp-8895442")
+  expect_equal(waterbody_edge_list$toID[1], "fp-8895402")
 
   expect_is(st_geometry(catchment_data), "sfc_MULTIPOLYGON")
   expect_true(all(c("ID", "area_sqkm") %in% names(catchment_data)))
 
-  expect_is(st_geometry(waterbody_data), "sfc_MULTILINESTRING")
-  expect_true(all(c("ID", "length_km", "slope_percent", "main_id") %in% names(waterbody_data)))
+  expect_is(st_geometry(flowpath_data), "sfc_MULTILINESTRING")
+  expect_true(all(c("ID", "length_km", "slope_percent", "main_id") %in% names(flowpath_data)))
 
   expect_true("ID" %in% names(nexus))
 })
@@ -125,5 +124,5 @@ test_that("io errors", {
   expect_error(write_hygeo(hygeo_list, out_path = temp_path,
                            edge_list_format = "csv", data_format = "gpkg",
                            overwrite = TRUE),
-               "hygeo_list must contain all of catchment, waterbody, nexus, catchment_edges, waterbody_edges")
+               "hygeo_list must contain all of catchment, flowpath, nexus, catchment_edges, waterbody_edges")
 })

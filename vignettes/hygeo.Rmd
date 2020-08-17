@@ -73,7 +73,7 @@ waterbody_prefix <- "waterbody_"
 
 (catchment_data <- get_catchment_data(catchment, catchment_edge_list))
 
-(waterbody_data <- get_waterbody_data(fline, waterbody_edge_list) %>%
+(waterbody_data <- get_flowpath_data(fline, waterbody_edge_list) %>%
     mutate(realized_catchment = gsub(waterbody_prefix, 
                                      catchment_prefix, ID)))
 

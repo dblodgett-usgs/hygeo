@@ -4,12 +4,12 @@
 \alias{get_nhd_crosswalk}
 \title{Get NHD Crosswalk}
 \usage{
-get_nhd_crosswalk(x, waterbody_prefix = "wat-")
+get_nhd_crosswalk(x, flowpath_prefix = "fp-")
 }
 \arguments{
-\item{x}{sf ata.frame output from reconcile_collapsed_flowlines() function}
+\item{x}{sf data.frame output from reconcile_collapsed_flowlines() function}
 
-\item{waterbody_prefix}{character prefix to be appended to local_id output.}
+\item{flowpath_prefix}{character prefix to be appended to local_id output.}
 }
 \description{
 Get NHD Crosswalk

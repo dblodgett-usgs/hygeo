@@ -13,7 +13,7 @@ test_that("get_hydrologic_location integration test", {
     align_nhdplus_names() %>%
     select(COMID, LevelPathI)
 
-  main_id_xwalk <- select(st_drop_geometry(hl$waterbody),
+  main_id_xwalk <- select(st_drop_geometry(hl$flowpath),
                           local_id = ID, main_id) %>%
     left_join(get_nhd_crosswalk(fline), by = "local_id") %>%
     mutate(COMID = as.integer(COMID)) %>%
@@ -30,15 +30,15 @@ test_that("get_hydrologic_location integration test", {
     left_join(main_id_xwalk, by = c("mr_LevelPathI" = "LevelPathI"))
 
   hyl <- select(hr_nodes, NHDPlusID, main_id)
-  waterbody <- hl$waterbody
+  flowpath <- hl$flowpath
 
   hyl <- st_transform(hyl, 5070)
 
-  expect_error(get_hydrologic_locaton(hyl, waterbody), "crs must be equal")
+  expect_error(get_hydrologic_locaton(hyl, flowpath), "crs must be equal")
 
-  waterbody <- st_transform(waterbody, 5070)
+  flowpath <- st_transform(flowpath, 5070)
 
-  hyl_out <- get_hydrologic_locaton(hyl, waterbody)
+  hyl_out <- get_hydrologic_locaton(hyl, flowpath)
 
   expect_equal(nrow(hyl_out), 5053)
 

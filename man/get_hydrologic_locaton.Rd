@@ -4,13 +4,13 @@
 \alias{get_hydrologic_locaton}
 \title{get hydrologic location}
 \usage{
-get_hydrologic_locaton(hyl, waterbody)
+get_hydrologic_locaton(hyl, flowpath)
 }
 \arguments{
 \item{hyl}{a set of hydrologic location geometry with an identifier in the first column,
 the mainstem id in the seccond column, and an sf_column in the third.}
 
-\item{waterbody}{the waterbody table of an hygeo object.}
+\item{flowpath}{the flowpath table of an hygeo object.}
 }
 \value{
 sf data.frame

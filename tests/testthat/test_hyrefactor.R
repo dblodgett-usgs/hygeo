@@ -21,15 +21,15 @@ test_that("all functions run", {
 
 
   expect_equal(names(hl$waterbody_edges), c("ID", "toID"))
-  expect_equal(hl$waterbody_edges$ID[1], "wat-1")
-  expect_equal(hl$waterbody_edges$toID[1], "wat-4")
+  expect_equal(hl$waterbody_edges$ID[1], "fp-1")
+  expect_equal(hl$waterbody_edges$toID[1], "fp-4")
 
   waterbody_edge_list_drop_geo <- get_waterbody_edge_list(sf::st_drop_geometry(fline),
-                                                          waterbody_prefix = "wat-")
+                                                          waterbody_prefix = "fp-")
 
   expect_equal(names(waterbody_edge_list_drop_geo), c("ID", "toID"))
-  expect_equal(waterbody_edge_list_drop_geo$ID[1], "wat-1")
-  expect_equal(waterbody_edge_list_drop_geo$toID[1], "wat-4")
+  expect_equal(waterbody_edge_list_drop_geo$ID[1], "fp-1")
+  expect_equal(waterbody_edge_list_drop_geo$toID[1], "fp-4")
 
   expect_error(
   catchment_data <- get_catchment_data(dplyr::select(catchment, -area_sqkm),
@@ -40,8 +40,8 @@ test_that("all functions run", {
   expect_is(st_geometry(hl$catchment), "sfc_MULTIPOLYGON")
   expect_true(all(c("ID", "area_sqkm") %in% names(hl$catchment)))
 
-  expect_is(st_geometry(hl$waterbody), "sfc_LINESTRING")
-  expect_true(all(c("ID", "length_km", "slope_percent", "main_id") %in% names(hl$waterbody)))
+  expect_is(st_geometry(hl$flowpath), "sfc_LINESTRING")
+  expect_true(all(c("ID", "length_km", "slope_percent", "main_id") %in% names(hl$flowpath)))
 
   expect_true("ID" %in% names(nexus))
 
@@ -49,11 +49,11 @@ test_that("all functions run", {
 
   expect_equal(nrow(xwalk), 130)
 
-  expect_equal(xwalk$local_id[1], "wat-1")
+  expect_equal(xwalk$local_id[1], "fp-1")
 
-  xwalk <- get_nhd_crosswalk(fline, "water-")
+  xwalk <- get_nhd_crosswalk(fline, "fp-test-")
 
-  expect_equal(xwalk$local_id[1], "water-1")
+  expect_equal(xwalk$local_id[1], "fp-test-1")
 })
 
 test_that("io_functions", {

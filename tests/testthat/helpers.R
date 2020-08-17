@@ -27,7 +27,7 @@ check_io <- function(hygeo_list, temp_path){
   expect_equal(lapply(hygeo_list, ncol), lapply(hygeo_list_read, ncol))
 
   expect_true(all(sf::st_is_valid(hygeo_list$catchment)))
-  expect_true(all(sf::st_is_valid(hygeo_list$waterbody)))
+  expect_true(all(sf::st_is_valid(hygeo_list$flowpath)))
   expect_true(all(sf::st_is_valid(hygeo_list$nexus)))
 }
 
@@ -46,7 +46,7 @@ get_test_hygoeo_object <- function() {
 
 
   waterbody_edge_list <- get_waterbody_edge_list(fline,
-                                                 waterbody_prefix = "wat-")
+                                                 waterbody_prefix = "fp-")
 
 
 
@@ -57,16 +57,15 @@ get_test_hygoeo_object <- function() {
                                        catchment_edge_list,
                                        catchment_prefix = "cat-")
 
-  waterbody_data <- get_waterbody_data(fline,
+  flowpath_data <- get_flowpath_data(fline,
                                        waterbody_edge_list,
-                                       waterbody_prefix = "wat-")
+                                       flowpath_prefix = "fp-")
 
   nexus_data <- get_nexus_data(nexus,
-                               catchment_edge_list,
-                               waterbody_edge_list)
+                               catchment_edge_list)
 
   hygeo_list <- list(catchment = catchment_data,
-                     waterbody = waterbody_data,
+                     flowpath = flowpath_data,
                      nexus = nexus_data,
                      catchment_edges = catchment_edge_list,
                      waterbody_edges = waterbody_edge_list)

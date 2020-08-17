@@ -1,6 +1,6 @@
 #' @title Write hygeo
 #' @param hygeo_list list of class hygeo containing:
-#'   catchment, waterbody, nexus, catchment_edges, and waterbody_edges.
+#'   catchment, flowpath, nexus, catchment_edges, and waterbody_edges.
 #' @param out_path character path to store outputs
 #' @param edge_list_format character 'json' or 'csv'
 #' @param data_format character 'geojson' or 'gpkg'
@@ -30,7 +30,7 @@ write_hygeo <- function(hygeo_list,
 
   if(data_format == "geojson") {
     cf <- file.path(out_path, "catchment_data.geojson")
-    wf <- file.path(out_path, "waterbody_data.geojson")
+    wf <- file.path(out_path, "flowpath_data.geojson")
     nf <- file.path(out_path, "nexus_data.geojson")
   } else if(data_format == "gpkg") {
     cf <- file.path(out_path, "hygeo.gpkg")
@@ -68,12 +68,12 @@ write_hygeo <- function(hygeo_list,
     write_fun <- function(x, y) write_sf(st_make_valid(st_transform(x, 4326)), y)
 
     write_fun(hygeo_list$catchment, cf)
-    write_fun(hygeo_list$waterbody, wf)
+    write_fun(hygeo_list$flowpath, wf)
     write_fun(hygeo_list$nexus, nf)
 
   } else if(data_format == "gpkg") {
     write_sf(st_make_valid(hygeo_list$catchment), cf, "catchment")
-    write_sf(st_make_valid(hygeo_list$waterbody), wf, "waterbody")
+    write_sf(st_make_valid(hygeo_list$flowpath), wf, "flowpath")
     write_sf(st_make_valid(hygeo_list$nexus), nf, "nexus")
   }
 
@@ -90,12 +90,12 @@ read_hygeo <- function(path) {
   fs <- list.files(path, full.names = TRUE, recursive = FALSE)
 
   catchment_file <- fs[grepl("catchment_data", fs)]
-  waterbody_file <- fs[grepl("waterbody_data", fs)]
+  flowpath_file <- fs[grepl("flowpath_data", fs)]
   nexus_file <- fs[grepl("nexus_data", fs)]
 
   if(length(catchment_file) == 0) {
     catchment_file <-
-      waterbody_file <-
+      flowpath_file <-
       nexus_file <- fs[grepl("hygeo.gpkg", fs)]
   }
 
@@ -103,7 +103,7 @@ read_hygeo <- function(path) {
   waterbody_edge_file <- fs[grepl("waterbody_edge_list", fs)]
 
   out <- list(catchment = read_data(catchment_file, "catchment"),
-              waterbody = read_data(waterbody_file, "waterbody"),
+              flowpath = read_data(flowpath_file, "flowpath"),
               nexus = read_data(nexus_file, "nexus"),
               catchment_edges = read_edges(catchment_edge_file),
               waterbody_edges = read_edges(waterbody_edge_file))
@@ -131,7 +131,7 @@ read_edges <- function(f) {
 }
 
 check_hygeo <- function(hygeo_list) {
-  req_names <- c("catchment", "waterbody", "nexus",
+  req_names <- c("catchment", "flowpath", "nexus",
                  "catchment_edges", "waterbody_edges")
 
   if(!methods::is(hygeo_list, "hygeo")) stop("hygeo_list must be class 'hygeo'")

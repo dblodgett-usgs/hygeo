@@ -43,10 +43,10 @@ hr_fline <- read_sf(src_gpkg, "hr_NHDPlusFlowline") %>%
 fline <- read_sf("../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
 
 waterbody_edge_list <- get_waterbody_edge_list(fline,
-                                               waterbody_prefix = "wat-")
-waterbody <- get_waterbody_data(fline,
+                                               waterbody_prefix = "fp-")
+waterbody <- get_flowpath_data(fline,
                                 waterbody_edge_list,
-                                waterbody_prefix = "wat-")
+                                flowpath_prefix = "fp-")
 ```
 
 Given these three datasets we need to do a little manipulation to get the identifiers straight. 

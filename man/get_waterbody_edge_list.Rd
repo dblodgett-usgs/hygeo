@@ -4,7 +4,7 @@
 \alias{get_waterbody_edge_list}
 \title{get waterbody edge list}
 \usage{
-get_waterbody_edge_list(fline, waterbody_prefix = "waterbody_")
+get_waterbody_edge_list(fline, waterbody_prefix = "wat-")
 }
 \arguments{
 \item{fline}{sf data.frame NHDPlus Flowlines or hyRefactor output.}

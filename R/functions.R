@@ -101,7 +101,7 @@ get_catchment_edges <- function(fline,
 #' @importFrom nhdplusTools prepare_nhdplus
 #' @export
 get_waterbody_edge_list <- function(fline,
-                                    waterbody_prefix = "waterbody_") {
+                                    waterbody_prefix = "wat-") {
   if("COMID" %in% names(fline) && !"toCOMID" %in% names(fline)) {
     fline <- prepare_nhdplus(fline, 0, 0, 0, FALSE, warn = FALSE) %>%
       select(ID = .data$COMID, toID = .data$toCOMID)
@@ -134,15 +134,16 @@ get_catchment_data <- function(catchment, catchment_edge_list,
     left_join(catchment_edge_list, by = "ID")
 }
 
-#' @title get_waterbody_data
+#' @title get_flowpath_data
+#' Adds flowpath realization geometry and attributes to catchments
 #' @param fline sf data.frame NHDPlus Flowlines or hyRefactor output.
-#' @param waterbody_edge_list data.frame edge list of connections
+#' @param catchment_edge_list data.frame edge list of connections
 #' to/from waterbodies
-#' @param waterbody_prefix character prefix for waterbody IDs
+#' @param flowpathy_prefix character prefix for flowpath IDs
 #' @importFrom dplyr select mutate left_join
 #' @export
-get_waterbody_data <- function(fline, waterbody_edge_list,
-                               waterbody_prefix = "waterbody_") {
+get_flowpath_data <- function(fline, catchment_edge_list,
+                               flowpath_prefix = "flowpath_") {
 
   if("COMID" %in% names(fline)) fline <- rename(fline, ID = .data$COMID,
                                                 LevelPathID = .data$LevelPathI)
@@ -151,35 +152,33 @@ get_waterbody_data <- function(fline, waterbody_edge_list,
          length_km = .data$LENGTHKM,
          slope_percent = .data$slope,
          main_id = .data$LevelPathID) %>%
-    mutate(ID = paste0(waterbody_prefix, .data$ID)) %>%
-    left_join(waterbody_edge_list, by = "ID")
+    mutate(ID = paste0(flowpath_prefix, .data$ID)) %>%
+    left_join(catchment_edge_list, by = "ID")
 }
 
 #' @title get nexus data
 #' @param nexus data.frame as returned by get_nexus
 #' @param catchment_edge_list data.frame edge list of connections
 #' to/from catchments
-#' @param waterbody_edge_list data.frame edge list of connections
-#' to/from waterbodies
 #' @importFrom dplyr select
 #' @export
-get_nexus_data <- function(nexus, catchment_edge_list, waterbody_edge_list) {
+get_nexus_data <- function(nexus, catchment_edge_list) {
   select(nexus, .data$ID) %>%
-    left_join(rbind(catchment_edge_list, waterbody_edge_list), by = "ID")
+    left_join(rbind(catchment_edge_list), by = "ID")
 }
 
 #' Get NHD Crosswalk
-#' @param x sf ata.frame output from reconcile_collapsed_flowlines() function
-#' @param waterbody_prefix character prefix to be appended to local_id output.
+#' @param x sf data.frame output from reconcile_collapsed_flowlines() function
+#' @param flowpath_prefix character prefix to be appended to local_id output.
 #' @export
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr unnest
-get_nhd_crosswalk <- function(x, waterbody_prefix = "wat-") {
+get_nhd_crosswalk <- function(x, flowpath_prefix = "fp-") {
   st_drop_geometry(x) %>%
     select(.data$ID, .data$member_COMID) %>%
     mutate(member_COMID = strsplit(.data$member_COMID, ",")) %>%
     unnest(cols = c("member_COMID")) %>%
-    mutate(local_id = paste0(waterbody_prefix, .data$ID)) %>%
+    mutate(local_id = paste0(flowpath_prefix, .data$ID)) %>%
     select(.data$local_id, COMID = .data$member_COMID)
 }
