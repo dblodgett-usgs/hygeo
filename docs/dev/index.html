@@ -91,39 +91,52 @@
 
 <p>installation: <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("dblodgett-usgs/hygeo")</a></code></p>
 <p>This R package is part of the Next Generation Water Modeling Engine and Framework Prototype project taking place here: <a href="https://github.com/NOAA-OWP/ngen" class="uri">https://github.com/NOAA-OWP/ngen</a></p>
+<p><img src="https://github.com/dblodgett-usgs/hygeo/raw/master/docs/img/map.png" alt="Example Image"></p>
 <div id="hydrologic-and-hydrodynamic-graphs" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hydrologic-and-hydrodynamic-graphs" class="anchor"></a>Hydrologic and Hydrodynamic Graphs:</h2>
-<p><img src="https://github.com/NOAA-OWP/ngen/blob/master/data/demo.png?raw=true" alt="Example Image"></p>
-<p>At the top level we have a hydrologic graph of catchments and nexuses and a hydrodynamic graph of waterbodies that “pins” to the catchment graph at nexuses.</p>
-<p>Both catchments and nexuses are labeled nodes with unlabeled directed edges between.</p>
+<p>At the top level we have a hydrologic graph of catchments and nexuses and a hydrodynamic graph of waterbodies that “pins” to the catchment graph at nexuses and hydrologic locations along flowpaths.</p>
+<p>Both catchments and nexuses should be thought of as labeled nodes with unlabeled directed edges between.</p>
 <p>Any catchment node of degree 1 with an outward edge is a headwater and degree 1 with an inward edge is an outlet.</p>
-<p>Any catchment node of degree 2 is a typical catchment that has a coincident set of (one or more) waterbodies in the waterbody graph.</p>
-<p>Using this graph scheme, headwater catchments contribute either to the upstream end of a river (flow path) or to the shore of a waterbody that breaks up the coverage of catchment areas.</p>
+<p>Any catchment node of degree 2 is a typical catchment that may have a coincident set of (one or more) waterbodies in the waterbody graph.</p>
+<p>Using this graph scheme, headwater catchments contribute either to the upstream end of a flowpath or to the shore of a waterbody that breaks up the coverage of catchments.</p>
 <p><strong>Data</strong><br>
-Two edge lists describing the graphs.</p>
+Two topology edge lists describing the graphs.</p>
 </div>
 <div id="catchment" class="section level2">
 <h2 class="hasAnchor">
 <a href="#catchment" class="anchor"></a>Catchment:</h2>
-<p>Every catchment has a catchment area realization. The catchment area would be implemented as a local water budget model which takes inputs from the atmosphere and non-surficial hydro geologic systems and contributes outputs to an outlet nexus. There is a potential to have a catchment contribute flow incrementally along the waterbody(ies) that flow through it but this would be an advanced case.</p>
-<p>Every catchment of degree 2 will have a flow path that has an association with an upstream and downstream extent of a hydrodynamic model represented as a waterbody.</p>
+<p>Every catchment has a catchment area realization. The catchment area would be implemented as a local water budget model which takes inputs from the atmosphere and non-surficial hydro geologic systems and contributes outputs to an outlet nexus.</p>
+<p>Every catchment of degree 2 will have a flowpath realization. The flowpath would be used to linearly reference hydrologic locations and could be used for hydrologic routing. Using a flowpath realization, waterbodies relate to a catchment at hydrologic locations.</p>
 <p><strong>Data</strong><br>
-Single valued catchment properties that correspond to catchment area.</p>
+Single valued catchment properties and geometry that correspond to catchment area and flowpath. Modeled as two simple features tables – one for catchment area and one for flowpath.</p>
 </div>
 <div id="nexus" class="section level2">
 <h2 class="hasAnchor">
 <a href="#nexus" class="anchor"></a>Nexus:</h2>
 <p>All nexuses must be of degree 2 or more. A nexus can receive flow from one or more catchment and contribute it to one or more catchments.</p>
 <p><strong>Data</strong><br>
-An edge list between nexuses in the catchment graph. Edge list not required if shared nexus IDs are used.</p>
+An edge list between nexuses in the catchment graph. A simple-features table of hydrologic locations represents the nexuses and can be used to associate nexuses to waterbodies and flowpaths.</p>
 </div>
 <div id="waterbodies" class="section level2">
 <h2 class="hasAnchor">
 <a href="#waterbodies" class="anchor"></a>Waterbodies</h2>
-<p>Waterbodies either reside over (rivers and floodplains) or break apart the catchment area coverage (large lakes). Flow can be passed from catchments to waterbodies at nexuses.</p>
+<p>Waterbodies either reside over (rivers and floodplains) or break apart the catchment area coverage (large lakes). Flow can be passed from catchments to waterbodies at nexuses. Waterbodies and catchments can also be associated through hydrologic locations along flowpaths.</p>
 <p><strong>Data</strong><br>
 Parameters of hydrodynamic model and/or storage discharge or reservoir operations.</p>
+</div>
+<div id="class-diagram-of-relevant-hy_features-classes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#class-diagram-of-relevant-hy_features-classes" class="anchor"></a>Class Diagram of relevant HY_Features classes.</h2>
+<p><img src="https://github.com/dblodgett-usgs/hygeo/raw/master/docs/uml/summary.png" alt="uml of ngen feature classes"></p>
+<ul>
+<li>In order to be complete, a catchment realization must be able to perform the functions of a flowpath and a catchment area.</li>
+<li>To support multiple scale models and data, any catchment realization may be composed of a network of other catchment realizations.</li>
+<li>Catchment and nexus provide identity and topology. They do not have attributes or geometry.</li>
+<li>Hydrolocation provides a spatial feature that can be referenced along a flowpath.</li>
+<li>An indirect position provides the distance between a point referent and a a hydrologic location measured along a given flowpath.</li>
+<li>Models of waterbodies are referenced to flowpaths using hydrolocations and indirect positioning.</li>
+</ul>
 </div>
 <div id="disclaimer" class="section level2">
 <h2 class="hasAnchor">

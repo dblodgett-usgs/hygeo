@@ -6,7 +6,7 @@ installation: `remotes::install_github("dblodgett-usgs/hygeo")`
 
 This R package is part of the Next Generation Water Modeling Engine and Framework Prototype project taking place here: https://github.com/NOAA-OWP/ngen
 
-![Example Image](https://github.com/NOAA-OWP/ngen/blob/master/data/demo.png?raw=true)  
+![Example Image](https://github.com/dblodgett-usgs/hygeo/raw/master/docs/img/map.png)  
 
 ## Hydrologic and Hydrodynamic Graphs:
 At the top level we have a hydrologic graph of catchments and nexuses and a hydrodynamic graph of waterbodies that “pins” to the catchment graph at nexuses and hydrologic locations along flowpaths. 
@@ -43,7 +43,7 @@ Waterbodies either reside over (rivers and floodplains) or break apart the catch
 Parameters of hydrodynamic model and/or storage discharge or reservoir operations.
 
 ## Class Diagram of relevant HY_Features classes.
-![uml of ngen feature classes](docs/uml/summary.png)
+![uml of ngen feature classes](https://github.com/dblodgett-usgs/hygeo/raw/master/docs/uml/summary.png)
 
 - In order to be complete, a catchment realization must be able to perform the functions of a flowpath and a catchment area.
 - To support multiple scale models and data, any catchment realization may be composed of a network of other catchment realizations.

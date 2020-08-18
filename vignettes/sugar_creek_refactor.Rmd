@@ -189,7 +189,7 @@ nexus_data <- get_nexus_data(nexus,
                              catchment_edge_list)
 
 mapview::mapview(catchment_data, layer.name = "Catchment Area", col.regions = "tan") +
-  mapview::mapview(waterbody_data, layer.name = "Flowpaths", color = "blue") +
+  mapview::mapview(flowpath_data, layer.name = "Flowpaths", color = "blue") +
   mapview::mapview(nexus_data, layer.name = "Nexuses", cex = 3, color = "yellow4", col.regions = "yellow4") + 
   mapview::mapview(nwis_sites, layer.name = "NWIS Sites", cex = 6, color = "darkgrey", col.regions = "grey")
 ```

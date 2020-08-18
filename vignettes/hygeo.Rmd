@@ -73,18 +73,18 @@ waterbody_prefix <- "waterbody_"
 
 (catchment_data <- get_catchment_data(catchment, catchment_edge_list))
 
-(waterbody_data <- get_flowpath_data(fline, waterbody_edge_list) %>%
+(flowpath_data <- get_flowpath_data(fline, catchment_edge_list) %>%
     mutate(realized_catchment = gsub(waterbody_prefix, 
                                      catchment_prefix, ID)))
 
-(nexus_data <- get_nexus_data(nexus, catchment_edge_list, waterbody_edge_list))
+(nexus_data <- get_nexus_data(nexus, catchment_edge_list))
 
 ```
 
 The outputs can be rendered into csv or json:
 ```{r output, eval=TRUE}
 hygeo_list <- list(catchment = catchment_data, 
-                   waterbody = waterbody_data, 
+                   flowpath = flowpath_data, 
                    nexus = nexus_data,
                    catchment_edges = catchment_edge_list,
                    waterbody_edges = waterbody_edge_list)

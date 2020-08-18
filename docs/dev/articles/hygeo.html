@@ -113,7 +113,7 @@
 <span class="co">#&gt;     intersect, setdiff, setequal, union</span>
 <span class="co"># https://github.com/r-spatial/sf</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
-<span class="co">#&gt; Linking to GEOS 3.8.1, GDAL 3.1.0, PROJ 6.3.2</span>
+<span class="co">#&gt; Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 6.3.2</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">hygeo</span>)
 
@@ -142,7 +142,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_transform.html">st_transform</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_geometry.html">st_geometry</a></span>(<span class="no">catchment</span>), <span class="fl">3857</span>), <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_transform.html">st_transform</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_geometry.html">st_geometry</a></span>(<span class="no">nexus</span>), <span class="fl">3857</span>), <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="hygeo_files/figure-html/get_data-1.png" width="576"></p>
-<p>Given the flowlines, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowlines in this case. Waterbodies are 1:1 with catchments in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.</p>
+<p>Given the flowpaths, catchments, and nexuses, we can generate topology edge lists and data representations. The nexuses are outlet points along flowpaths in this case. Waterbodies are 1:1 with flowpath catchment realizations in this example but the data model will support 1:n or n:1 waterbody:catchment relationships.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">catchment_prefix</span> <span class="kw">&lt;-</span> <span class="st">"catchment_"</span>
 <span class="no">nexus_prefix</span> <span class="kw">&lt;-</span> <span class="st">"nexus_"</span>
 <span class="no">waterbody_prefix</span> <span class="kw">&lt;-</span> <span class="st">"waterbody_"</span>
@@ -186,7 +186,7 @@
 <span class="co">#&gt; 3 (((-79.13297 35.97544, -79.13369 35.97596, -79… catchment…      2.12 nexus_25…</span>
 <span class="co">#&gt; 4 (((-79.11932 35.98001, -79.12077 35.98198, -79… catchment…      1.77 nexus_25…</span>
 
-(<span class="no">waterbody_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_waterbody_data.html">get_waterbody_data</a></span>(<span class="no">fline</span>, <span class="no">waterbody_edge_list</span>) <span class="kw">%&gt;%</span>
+(<span class="no">flowpath_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_flowpath_data.html">get_flowpath_data</a></span>(<span class="no">fline</span>, <span class="no">catchment_edge_list</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">realized_catchment</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="no">waterbody_prefix</span>,
                                      <span class="no">catchment_prefix</span>, <span class="no">ID</span>)))
 <span class="co">#&gt; Simple feature collection with 4 features and 6 fields</span>
@@ -198,13 +198,13 @@
 <span class="co">#&gt; # A tibble: 4 x 7</span>
 <span class="co">#&gt;                        geom ID    length_km slope_percent main_id toID </span>
 <span class="co">#&gt; *     &lt;MULTILINESTRING [°]&gt; &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 Z ((-79.16244 35.98999 0… wate…      2.78       0.0163   2.50e8 wate…</span>
-<span class="co">#&gt; 2 Z ((-79.13053 35.97413 0… wate…      1.78       0.00903  2.50e8 wate…</span>
-<span class="co">#&gt; 3 Z ((-79.12653 35.9883 0,… wate…      1.22       0.00424  2.50e8 wate…</span>
-<span class="co">#&gt; 4 Z ((-79.13963 35.98956 0… wate…      1.20       0.00652  2.50e8 wate…</span>
+<span class="co">#&gt; 1 Z ((-79.16244 35.98999 0… catc…      2.78       0.0163   2.50e8 nexu…</span>
+<span class="co">#&gt; 2 Z ((-79.13053 35.97413 0… catc…      1.78       0.00903  2.50e8 nexu…</span>
+<span class="co">#&gt; 3 Z ((-79.12653 35.9883 0,… catc…      1.22       0.00424  2.50e8 nexu…</span>
+<span class="co">#&gt; 4 Z ((-79.13963 35.98956 0… catc…      1.20       0.00652  2.50e8 nexu…</span>
 <span class="co">#&gt; # … with 1 more variable: realized_catchment &lt;chr&gt;</span>
 
-(<span class="no">nexus_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_nexus_data.html">get_nexus_data</a></span>(<span class="no">nexus</span>, <span class="no">catchment_edge_list</span>, <span class="no">waterbody_edge_list</span>))
+(<span class="no">nexus_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_nexus_data.html">get_nexus_data</a></span>(<span class="no">nexus</span>, <span class="no">catchment_edge_list</span>))
 <span class="co">#&gt; Simple feature collection with 3 features and 2 fields</span>
 <span class="co">#&gt; geometry type:  POINT</span>
 <span class="co">#&gt; dimension:      XY</span>
@@ -218,7 +218,7 @@
 <span class="co">#&gt; 3 (-79.11841 35.99613) nexus_250031903 catchment_0</span></pre></body></html></div>
 <p>The outputs can be rendered into csv or json:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">hygeo_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">catchment</span> <span class="kw">=</span> <span class="no">catchment_data</span>,
-                   <span class="kw">waterbody</span> <span class="kw">=</span> <span class="no">waterbody_data</span>,
+                   <span class="kw">flowpath</span> <span class="kw">=</span> <span class="no">flowpath_data</span>,
                    <span class="kw">nexus</span> <span class="kw">=</span> <span class="no">nexus_data</span>,
                    <span class="kw">catchment_edges</span> <span class="kw">=</span> <span class="no">catchment_edge_list</span>,
                    <span class="kw">waterbody_edges</span> <span class="kw">=</span> <span class="no">waterbody_edge_list</span>)
@@ -245,7 +245,7 @@
 <span class="co">#&gt; 3 catchment…      2.12 nexus_250… (((-79.13297 35.97544, -79.13369 35.97596, -7…</span>
 <span class="co">#&gt; 4 catchment…      1.77 nexus_250… (((-79.11932 35.98001, -79.12077 35.98198, -7…</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $waterbody</span>
+<span class="co">#&gt; $flowpath</span>
 <span class="co">#&gt; Simple feature collection with 4 features and 6 fields</span>
 <span class="co">#&gt; geometry type:  MULTILINESTRING</span>
 <span class="co">#&gt; dimension:      XY</span>
@@ -254,10 +254,10 @@
 <span class="co">#&gt; # A tibble: 4 x 7</span>
 <span class="co">#&gt;   ID    length_km slope_percent main_id toID  realized_catchm…</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 wate…      2.78       0.0163   2.50e8 wate… catchment_88954…</span>
-<span class="co">#&gt; 2 wate…      1.78       0.00903  2.50e8 wate… catchment_88955…</span>
-<span class="co">#&gt; 3 wate…      1.22       0.00424  2.50e8 wate… catchment_88953…</span>
-<span class="co">#&gt; 4 wate…      1.20       0.00652  2.50e8 wate… catchment_88954…</span>
+<span class="co">#&gt; 1 catc…      2.78       0.0163   2.50e8 nexu… catchment_88954…</span>
+<span class="co">#&gt; 2 catc…      1.78       0.00903  2.50e8 nexu… catchment_88955…</span>
+<span class="co">#&gt; 3 catc…      1.22       0.00424  2.50e8 nexu… catchment_88953…</span>
+<span class="co">#&gt; 4 catc…      1.20       0.00652  2.50e8 nexu… catchment_88954…</span>
 <span class="co">#&gt; # … with 1 more variable: geometry &lt;MULTILINESTRING [°]&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $nexus</span>
