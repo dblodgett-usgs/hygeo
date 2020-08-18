@@ -154,7 +154,7 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              fline_rec = reconcile,
                                                              para = 1)
 
-nhd_crosswalk <- get_nhd_crosswalk(reconcile, waterbody_prefix) 
+nhd_crosswalk <- get_nhd_crosswalk(reconcile, catchment_prefix = catchment_prefix) 
 ```
 ```{r, eval=FALSE, include=FALSE}
 write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
@@ -179,15 +179,14 @@ catchment_data <- get_catchment_data(reconcile_divides,
                                      catchment_edge_list,
                                      catchment_prefix = catchment_prefix)
 
-waterbody_data <- get_flowpath_data(reconcile,
+flowpath_data <- get_flowpath_data(reconcile,
                                      waterbody_edge_list,
-                                     flowpath_prefix = waterbody_prefix) %>%
+                                     catchment_prefix = waterbody_prefix) %>%
       mutate(realized_catchment = gsub(waterbody_prefix, 
                                      catchment_prefix, ID))
 
 nexus_data <- get_nexus_data(nexus,
-                             catchment_edge_list,
-                             waterbody_edge_list)
+                             catchment_edge_list)
 
 mapview::mapview(catchment_data, layer.name = "Catchment Area", col.regions = "tan") +
   mapview::mapview(waterbody_data, layer.name = "Flowpaths", color = "blue") +
@@ -199,7 +198,7 @@ The outputs can be rendered into csv or json:
 ```{r output, eval=TRUE}
 
 hygeo_list <- list(catchment = catchment_data, 
-                   waterbody = waterbody_data, 
+                   flowpath = flowpath_data, 
                    nexus = nexus_data,
                    catchment_edges = catchment_edge_list,
                    waterbody_edges = waterbody_edge_list)

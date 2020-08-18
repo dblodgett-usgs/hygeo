@@ -6,22 +6,21 @@ installation: `remotes::install_github("dblodgett-usgs/hygeo")`
 
 This R package is part of the Next Generation Water Modeling Engine and Framework Prototype project taking place here: https://github.com/NOAA-OWP/ngen
 
-## Hydrologic and Hydrodynamic Graphs:
-
 ![Example Image](https://github.com/NOAA-OWP/ngen/blob/master/data/demo.png?raw=true)  
 
-At the top level we have a hydrologic graph of catchments and nexuses and a hydrodynamic graph of waterbodies that “pins” to the catchment graph at nexuses. 
+## Hydrologic and Hydrodynamic Graphs:
+At the top level we have a hydrologic graph of catchments and nexuses and a hydrodynamic graph of waterbodies that “pins” to the catchment graph at nexuses and hydrologic locations along flowpaths. 
 
-Both catchments and nexuses are labeled nodes with unlabeled directed edges between. 
+Both catchments and nexuses should be thought of as labeled nodes with unlabeled directed edges between. 
 
 Any catchment node of degree 1 with an outward edge is a headwater and degree 1 with an inward edge is an outlet. 
 
-Any catchment node of degree 2 is a typical catchment that has a coincident set of (one or more) waterbodies in the waterbody graph.
+Any catchment node of degree 2 is a typical catchment that may have a coincident set of (one or more) waterbodies in the waterbody graph.
 
-Using this graph scheme, headwater catchments contribute either to the upstream end of a river (flowpath) or to the shore of a waterbody that breaks up the coverage of catchment areas.
+Using this graph scheme, headwater catchments contribute either to the upstream end of a flowpath or to the shore of a waterbody that breaks up the coverage of catchments.
 
 **Data**  
-Two edge lists describing the graphs.
+Two topology edge lists describing the graphs.
 
 ## Catchment:
 Every catchment has a catchment area realization. The catchment area would be implemented as a local water budget model which takes inputs from the atmosphere and non-surficial hydro geologic systems and contributes outputs to an outlet nexus.
@@ -35,13 +34,23 @@ Single valued catchment properties and geometry that correspond to catchment are
 All nexuses must be of degree 2 or more. A nexus can receive flow from one or more catchment and contribute it to one or more catchments.
 
 **Data**  
-An edge list between nexuses in the catchment graph. A hydrologic location simple features table represents the nexuses and can be used to associate nexuses to waterbodies and flowpaths.
+An edge list between nexuses in the catchment graph. A simple-features table of hydrologic locations represents the nexuses and can be used to associate nexuses to waterbodies and flowpaths.
 
 ## Waterbodies 
 Waterbodies either reside over (rivers and floodplains) or break apart the catchment area coverage (large lakes). Flow can be passed from catchments to waterbodies at nexuses. Waterbodies and catchments can also be associated through hydrologic locations along flowpaths.
 
 **Data**  
 Parameters of hydrodynamic model and/or storage discharge or reservoir operations.
+
+## Class Diagram of relevant HY_Features classes.
+![uml of ngen feature classes](docs/uml/summary.png)
+
+- In order to be complete, a catchment realization must be able to perform the functions of a flowpath and a catchment area.
+- To support multiple scale models and data, any catchment realization may be composed of a network of other catchment realizations.
+- Catchment and nexus provide identity and topology. They do not have attributes or geometry.
+- Hydrolocation provides a spatial feature that can be referenced along a flowpath.
+- An indirect position provides the distance between a point referent and a a hydrologic location measured along a given flowpath.
+- Models of waterbodies are referenced to flowpaths using hydrolocations and indirect positioning.
 
 ## Disclaimer
 
