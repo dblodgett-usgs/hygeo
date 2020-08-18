@@ -1,0 +1,48 @@
+@startuml
+HY_CatchmentRealization <|-- HY_FlowPath
+HY_CatchmentRealization <|-- HY_CatchmentArea
+
+class HY_FlowPath {
++ flowpathFormulation
+}
+
+class HY_CatchmentArea {
++ catchmentAreaFormulation
+}
+
+class HY_IndirectPosition {
+    + distanceExpression
+    + distanceDescription
+__
+    <b>Constraints</b>
+    {point-referent}
+    {measure-along-flowpath}
+}
+
+HY_IndirectPosition --> "1" HY_FlowPath
+HY_IndirectPosition <--> HY_HydroLocation
+HY_IndirectPosition --> HY_HydroLocation
+
+HY_Waterbody --> HY_HydroLocation
+
+class HY_HydroLocation {
++ shape
++ hydroLocationType
+}
+HY_HydroLocation <--> HY_HydroNexus
+class HY_Waterbody {
+__
+<b>Constraints</b>
+{outlet-at-landmark}
+}
+
+HY_Catchment <--> HY_CatchmentRealization
+
+HY_Catchment <--> HY_HydroNexus
+HY_Catchment <--> HY_HydroNexus
+
+HY_HydroNetwork --|> HY_CatchmentRealization
+HY_HydroNetwork --> "0..*" HY_FlowPath
+HY_HydroNetwork --> "0..*" HY_CatchmentArea
+
+@enduml
