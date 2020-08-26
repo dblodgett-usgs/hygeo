@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.width=6,
   fig.height=4,
-  eval=nzchar(Sys.getenv("BUILD_VIGNETTES"))
+  eval=nzchar(Sys.getenv("BUILD_VIGNETTES")),
+  cache=FALSE
 )
 oldoption <- options(scipen = 9999)
 options(scipen = 9999)
@@ -109,8 +110,7 @@ hyRefactor::refactor_nhdplus(nhd$flowline,
                              out_reconciled = reconciled,
                              three_pass = TRUE,
                              purge_non_dendritic = FALSE, 
-                             events = split_sites,
-                             exclude_cats = nwis_sites$COMID[!nwis_sites$COMID %in% split_sites$COMID])
+                             events = split_sites)
 
 collapse <- sf::read_sf(collapsed)
 reconcile <- sf::read_sf(reconciled)
@@ -162,7 +162,7 @@ write_sf(reconcile_divides, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg"
 ```
 
 We can now pass reconciled divides into the hygeo package functions to generate catchment areas, waterbodies, and nexuses.
-```{r, eval=TRUE}
+```{r, eval=TRUE, cache=FALSE}
 nexus <- get_nexus(reconcile, 
                    nexus_prefix = nexus_prefix)
 
