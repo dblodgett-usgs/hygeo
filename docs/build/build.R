@@ -25,7 +25,7 @@ rmarkdown::render("vignettes/sugar_creek_refactor.Rmd",
                     split_m = 20000,
                     collapse_m = 3000,
                     gage_tolerance = 25),
-                  output_file = "..docs/build/coarse/index.html")
+                  output_file = "../docs/build/coarse/index.html")
 
 rmarkdown::render("vignettes/sugar_creek_refactor.Rmd",
                   params = list(
@@ -35,12 +35,13 @@ rmarkdown::render("vignettes/sugar_creek_refactor.Rmd",
                     gage_tolerance = 100),
                   output_file = "../docs/build/nhdp/index.html")
 
-zip("docs/build/coarse.zip", files = "docs/build/coarse/")
-zip("docs/build/fine.zip", files = "docs/build/fine/")
-zip("docs/build/default.zip", files = "docs/build/default")
-zip("docs/build/nhdp.zip", files = "docs/build/nhdp/")
-
-unlink("docs/build/coarse/*json")
-unlink("docs/build/fine/*json")
-unlink("docs/build/default/*json")
-unlink("docs/build/nhdp/*json")
+setwd("docs/build")
+zip::zip("coarse.zip",
+         files = list.files("coarse/", full.names = TRUE, pattern = "*json"))
+zip::zip("fine.zip",
+         files = list.files("fine", full.names = TRUE, pattern = "*json"))
+zip::zip("default.zip",
+         files = list.files("default", full.names = TRUE, pattern = "*json"))
+zip::zip("nhdp.zip",
+         files = list.files("nhdp", full.names = TRUE, pattern = "*json"))
+setwd("../../")
