@@ -51,6 +51,7 @@ check_nexus <- function(fline) {
     fline <- left_join(fline,
                        select(st_drop_geometry(fline), .data$ID, to_nID = .data$from_nID),
                        by = c("toID" = "ID"))
+    fline$to_nID[is.na(fline$to_nID)] <- 0
   }
 
   fline
@@ -127,7 +128,7 @@ get_catchment_data <- function(catchment, catchment_edge_list,
                                catchment_prefix = "catchment_") {
   if("FEATUREID" %in% names(catchment)) catchment <- rename(catchment, ID = .data$FEATUREID, area_sqkm = .data$AreaSqKM)
 
-  if(!"area_sqkm" %in% names(catchment)) stop("must supply area as AreaSqKM or area_sqkm")
+  if(!"area_sqkm" %in% names(catchment)) stop("must supply area as area_sqkm or AreaSqKM for NHDPlus schema.")
 
   catchment <- select(catchment, ID = .data$ID, area_sqkm = .data$area_sqkm) %>%
     mutate(ID = paste0(catchment_prefix, .data$ID)) %>%
@@ -146,10 +147,14 @@ get_flowpath_data <- function(fline, catchment_edge_list,
                               catchment_prefix = "catchment_") {
 
   if("COMID" %in% names(fline)) fline <- rename(fline, ID = .data$COMID,
-                                                LevelPathID = .data$LevelPathI)
+                                                LevelPathID = .data$LevelPathI,
+                                                length_km = .data$LENGTHKM)
+
+  if(!"length_km" %in% names(fline))
+    stop("must supply length as length_km or LENGTHKM for NHDPlus schema.")
 
   select(fline, ID = .data$ID,
-         length_km = .data$LENGTHKM,
+         length_km = .data$length_km,
          slope_percent = .data$slope,
          main_id = .data$LevelPathID) %>%
     mutate(ID = paste0(catchment_prefix, .data$ID)) %>%

@@ -35,7 +35,13 @@ test_that("all functions run", {
   catchment_data <- get_catchment_data(dplyr::select(catchment, -area_sqkm),
                                        hl$catchment_edges,
                                        catchment_prefix = "cat-"),
-  "must supply area as AreaSqKM or area_sqkm")
+  "must supply area as area_sqkm or AreaSqKM for NHDPlus schema.")
+
+  expect_error(
+    flowpath_data <- get_flowpath_data(dplyr::select(fline, -length_km),
+                                       catchment_edge_list = hl$catchment_edges),
+    "must supply length as length_km or LENGTHKM for NHDPlus schema."
+  )
 
   expect_is(st_geometry(hl$catchment), "sfc_MULTIPOLYGON")
   expect_true(all(c("ID", "area_sqkm") %in% names(hl$catchment)))
