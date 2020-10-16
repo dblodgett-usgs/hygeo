@@ -179,6 +179,8 @@ catchment_data <- get_catchment_data(reconcile_divides,
                                      catchment_edge_list,
                                      catchment_prefix = catchment_prefix)
 
+reconcile <- dplyr::rename(reconcile, length_km = LENGTHKM)
+
 flowpath_data <- get_flowpath_data(reconcile,
                                      waterbody_edge_list,
                                      catchment_prefix = waterbody_prefix) %>%

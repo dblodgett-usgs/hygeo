@@ -1,0 +1,111 @@
+---
+title: "CAMELS with hygeo output"
+author: "dblodgett@usgs.gov"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{nhdplushr_demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6,
+  fig.height=4
+)
+oldoption <- options(scipen = 9999)
+options(scipen = 9999)
+options("rgdal_show_exportToProj4_warnings"="none")
+```
+
+In this vignette, we demonstrate how to convert a [camels basin](https://ral.ucar.edu/solutions/products/camels) into an hygeo object.
+
+We'll first download the Camels basins.
+
+```{r download}
+url <- "https://ral.ucar.edu/sites/default/files/public/product-tool/camels-catchment-attributes-and-meteorology-for-large-sample-studies-dataset-downloads/basin_set_full_res.zip"
+
+out <- tempdir(check = TRUE)
+
+out_f <- file.path(out, basename(url))
+if(!file.exists(file.path(out, basename(url)))) {
+  download.file(url, destfile = out_f)
+}
+
+outdir <- gsub(".zip", "", out_f)
+try(zip::unzip(out_f, overwrite = FALSE, exdir = outdir))
+```
+Now we read in the basins and fix up their IDs to match the NWIS Site at the outlet of the basin. The `nhdplusTools` calls here are a quick and dirty way to get an NHDPlusV2 COMID and a subset of NHDPlus data.
+
+```{r spatial}
+basins <- sf::read_sf(file.path(outdir, "HCDN_nhru_final_671.shp"))
+
+basins$ID <- stringr::str_pad(as.character(basins$hru_id), width = 8, side = "left", pad = "0")
+
+id <- basins$ID[1]
+
+comid <- nhdplusTools::discover_nhdplus_id(nldi_feature = list(featureSource = "nwissite", 
+                                                               featureID = paste0("USGS-", id)))
+
+nhdplus <- nhdplusTools::plot_nhdplus(list(comid))
+```
+
+Now we extract the mainstem from the NHDPluS subset, generate a few simple attributes, and create the hygeo object.
+
+```{r hygeo}
+main <- dplyr::filter(nhdplusTools::align_nhdplus_names(nhdplus$flowline),
+                      LevelPathI == min(LevelPathI))
+
+crs <- sf::st_crs(main)
+
+len <- main$slopelenkm
+slo <- main$slope
+
+len <- len[slo >= 0]
+slo <- slo[slo >= 0]
+
+mean_slope <- sum(slo * len) / sum(len)
+
+main <- sf::st_line_merge(
+  do.call(c, sf::st_geometry(main)))
+
+main <- sf::st_sf(ID = id, toID = "",
+                  geom = list(main), crs = crs)
+
+main$toID <- NA
+main$length_km <- sf::st_length(sf::st_transform(main, 5070)) / 1000
+main$slope <- mean_slope
+main$LevelPathID <- id
+
+basin <- dplyr::select(dplyr::filter(basins, ID == id), ID)
+basin$area_sqkm <- as.numeric(sf::st_area(
+  sf::st_transform(basin, 5070))) / 1000^2
+
+nex <- hygeo::get_nexus(main)
+
+cat_edges <- hygeo::get_catchment_edges(main)
+
+wat_edges <- hygeo::get_waterbody_edge_list(main)
+
+cat_data <- hygeo::get_catchment_data(basin, cat_edges)
+
+fp_data <- hygeo::get_flowpath_data(main, cat_edges)
+
+nex_data <- hygeo::get_nexus_data(nex, cat_edges)
+
+hygeo_list <- list(catchment = cat_data,
+                   flowpath = fp_data,
+                   nexus = nex_data,
+                   catchment_edges = cat_edges,
+                   waterbody_edges = wat_edges)
+
+class(hygeo_list) <- "hygeo"
+
+mapview::mapview(list(cat_data, fp_data, nex_data))
+```
+
+```{r teardown, include=FALSE, eval=TRUE}
+options(oldoption)
+```

@@ -1,9 +1,10 @@
-pandoc: 2.9.2.1
+pandoc: 2.10.1
 pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
+  camels: camels.html
   hygeo: hygeo.html
   sugar_creek_hr: sugar_creek_hr.html
   sugar_creek_refactor: sugar_creek_refactor.html
-last_built: 2020-08-18T15:47Z
+last_built: 2020-10-16T19:48Z
 
