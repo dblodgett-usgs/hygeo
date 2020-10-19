@@ -73,7 +73,7 @@ test_that("io_functions", {
 
   expect_equal(names(hl), names(hl_read))
 
-  expect_equal(lapply(hl, get_names), lapply(hl_read, get_names))
+  expect_equal(lapply(hl, get_names, lower = TRUE), lapply(hl_read, get_names))
 
   expect_equal(lapply(hl, nrow), lapply(hl_read, nrow))
 

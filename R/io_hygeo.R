@@ -58,6 +58,10 @@ write_hygeo <- function(hygeo_list,
     write.csv(hygeo_list$waterbody_edges, wfe,
               row.names = FALSE)
   } else if(edge_list_format == "json") {
+
+    names(hygeo_list$catchment_edges) <- tolower(names(hygeo_list$catchment_edges))
+    names(hygeo_list$waterbody_edges) <- tolower(names(hygeo_list$waterbody_edges))
+
     jsonlite::write_json(hygeo_list$catchment_edges, cfe,
                          pretty = TRUE)
     jsonlite::write_json(hygeo_list$waterbody_edges, wfe,
@@ -65,7 +69,13 @@ write_hygeo <- function(hygeo_list,
   }
 
   if(data_format == "geojson") {
-    write_fun <- function(x, y) write_sf(st_make_valid(st_transform(x, 4326)), y)
+
+    write_fun <- function(x, y) {
+      names(x) <- tolower(names(x))
+
+      write_sf(st_make_valid(st_transform(x, 4326)), y,
+               layer_options = c("ID_FIELD=id", "ID_TYPE=String"))
+    }
 
     write_fun(hygeo_list$catchment, cf)
     write_fun(hygeo_list$flowpath, wf)

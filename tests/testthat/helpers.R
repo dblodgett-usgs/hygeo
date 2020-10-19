@@ -10,17 +10,21 @@ get_hygeo_temp <- function() {
   temp_path
 }
 
-get_names <- function(x) {
+get_names <- function(x, lower = FALSE) {
   try(x<- sf::st_drop_geometry(x), silent = TRUE)
+
+  if(lower) return(tolower(names(x)))
+
   names(x)
 }
 
-check_io <- function(hygeo_list, temp_path){
+check_io <- function(hygeo_list, temp_path, lower = FALSE){
   hygeo_list_read <- read_hygeo(temp_path)
 
   expect_equal(names(hygeo_list), names(hygeo_list_read))
 
-  expect_equal(lapply(hygeo_list, get_names), lapply(hygeo_list_read, get_names))
+  expect_equal(lapply(hygeo_list, get_names, lower = lower),
+               lapply(hygeo_list_read, get_names))
 
   expect_equal(lapply(hygeo_list, nrow), lapply(hygeo_list_read, nrow))
 

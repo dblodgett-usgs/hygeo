@@ -82,7 +82,7 @@ test_that("io functions", {
                                         overwrite = FALSE),
                "overwrite is FALSE and files exist")
 
-  check_io(hygeo_list, temp_path)
+  check_io(hygeo_list, temp_path, lower = TRUE)
 
   temp_path <- get_hygeo_temp()
 
@@ -97,7 +97,7 @@ test_that("io functions", {
   expect_equal(list.files(temp_path),
                c("catchment_edge_list.csv", "hygeo.gpkg", "waterbody_edge_list.csv"))
 
-  check_io(hygeo_list, temp_path)
+  check_io(hygeo_list, temp_path, lower = FALSE)
 })
 
 test_that("io errors", {
