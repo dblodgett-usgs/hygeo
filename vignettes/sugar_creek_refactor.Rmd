@@ -10,7 +10,7 @@ params:
   out_path: !r file.path(tempdir(check = TRUE), "hygeo")
   split_m: 5000
   collapse_m: 1000
-  gage_tolerance: 25
+  gage_tolerance: 5
 ---
 
 ```{r setup, include = FALSE}
@@ -66,7 +66,8 @@ For this demonstration we'll just use NWIS Sites as they exist. Here we go grab 
 nwis <- nhdplusTools::navigate_nldi(list(featureSource = "comid", 
                                          featureID = 9731454),
                                     mode = "UT", 
-                                    data_source = "nwissite")
+                                    data_source = "nwissite", 
+                                    distance_km = 9999)
 
 what_nwis_data <- dataRetrieval::whatNWISdata(siteNumber = gsub("USGS-", "", nwis$identifier))
 
@@ -155,6 +156,12 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              para = 1)
 
 nhd_crosswalk <- get_nhd_crosswalk(reconcile, catchment_prefix = catchment_prefix) 
+
+nhd_crosswalk <- dplyr::left_join(nhd_crosswalk, 
+                                  dplyr::select(sf::st_drop_geometry(nwis_sites), 
+                                                site_no, local_id) %>%
+                                    dplyr::mutate(local_id = gsub(waterbody_prefix, catchment_prefix, local_id)), 
+                                  by = "local_id")
 ```
 ```{r, eval=FALSE, include=FALSE}
 write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
