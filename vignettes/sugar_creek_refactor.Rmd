@@ -162,6 +162,20 @@ nhd_crosswalk <- dplyr::left_join(nhd_crosswalk,
                                                 site_no, local_id) %>%
                                     dplyr::mutate(local_id = gsub(waterbody_prefix, catchment_prefix, local_id)), 
                                   by = "local_id")
+
+network_order <- dplyr::select(sf::st_drop_geometry(nhd$flowline), COMID, Hydroseq)
+
+nhd_crosswalk <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(COMID)) %>%
+  left_join(network_order, by = c("outlet_COMID" = "COMID")) %>%
+  group_by(local_id) %>%
+  filter(Hydroseq == min(Hydroseq)) %>%
+  select(-Hydroseq) %>% ungroup()
+
+nhd_crosswalk <- setNames(lapply(seq_len(nrow(nhd_crosswalk)), function(x, df) {
+  out <- setNames(as.list(df[x, 2:ncol(df)]), names(df)[2:ncol(df)])  
+  out[!is.na(out)]
+}, df = nhd_crosswalk), nhd_crosswalk$local_id)
+
 ```
 ```{r, eval=FALSE, include=FALSE}
 write_sf(reconcile, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg", "reconcile")
@@ -218,7 +232,7 @@ out_path <- params$out_path
 dir.create(out_path, recursive = TRUE, showWarnings = FALSE)
 
 out_path <- write_hygeo(hygeo_list, out_path = out_path, overwrite = TRUE)
-jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"))
+jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"), pretty = TRUE, auto_unbox = TRUE)
 
 (hygeo_list_read <- read_hygeo(out_path))
 
