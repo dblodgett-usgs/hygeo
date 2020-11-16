@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hygeo</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.2</span>
       </span>
     </div>
 
@@ -241,7 +241,7 @@
 <span class="co">#&gt; bbox:           xmin: -79.16293 ymin: 35.97214 xmax: -79.11032 ymax: 35.99623</span>
 <span class="co">#&gt; geographic CRS: WGS 84</span>
 <span class="co">#&gt; # A tibble: 4 x 4</span>
-<span class="co">#&gt;   ID         area_sqkm toID                                             geometry</span>
+<span class="co">#&gt;   id         area_sqkm toid                                             geometry</span>
 <span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                                  &lt;MULTIPOLYGON [°]&gt;</span>
 <span class="co">#&gt; 1 catchment~      1.86 nexus_250~ (((-79.15822 35.98449, -79.15997 35.98514, -7~</span>
 <span class="co">#&gt; 2 catchment~      1.28 nexus_250~ (((-79.13297 35.97544, -79.13245 35.9787, -79~</span>
@@ -255,7 +255,7 @@
 <span class="co">#&gt; bbox:           xmin: -79.16244 ymin: 35.97413 xmax: -79.11841 ymax: 35.99613</span>
 <span class="co">#&gt; geographic CRS: WGS 84</span>
 <span class="co">#&gt; # A tibble: 4 x 7</span>
-<span class="co">#&gt;   ID    length_km slope_percent main_id toID  realized_catchm~</span>
+<span class="co">#&gt;   id    length_km slope_percent main_id toid  realized_catchm~</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;           </span>
 <span class="co">#&gt; 1 catc~      2.78       0.0163   2.50e8 nexu~ catchment_88954~</span>
 <span class="co">#&gt; 2 catc~      1.78       0.00903  2.50e8 nexu~ catchment_88955~</span>
@@ -270,14 +270,14 @@
 <span class="co">#&gt; bbox:           xmin: -79.13963 ymin: 35.9883 xmax: -79.11841 ymax: 35.99613</span>
 <span class="co">#&gt; geographic CRS: WGS 84</span>
 <span class="co">#&gt; # A tibble: 3 x 3</span>
-<span class="co">#&gt;   ID              toID                          geometry</span>
+<span class="co">#&gt;   id              toid                          geometry</span>
 <span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;                      &lt;POINT [°]&gt;</span>
 <span class="co">#&gt; 1 nexus_250031932 catchment_8895402 (-79.13963 35.98956)</span>
 <span class="co">#&gt; 2 nexus_250031930 catchment_8895396  (-79.12653 35.9883)</span>
 <span class="co">#&gt; 3 nexus_250031903 catchment_0       (-79.11841 35.99613)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $catchment_edges</span>
-<span class="co">#&gt;                  ID              toID</span>
+<span class="co">#&gt;                  id              toid</span>
 <span class="co">#&gt; 1 catchment_8895442   nexus_250031932</span>
 <span class="co">#&gt; 2 catchment_8895520   nexus_250031930</span>
 <span class="co">#&gt; 3 catchment_8895396   nexus_250031903</span>
@@ -287,7 +287,7 @@
 <span class="co">#&gt; 7   nexus_250031903       catchment_0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $waterbody_edges</span>
-<span class="co">#&gt;                 ID             toID</span>
+<span class="co">#&gt;                 id             toid</span>
 <span class="co">#&gt; 1 flowpath_8895442 flowpath_8895402</span>
 <span class="co">#&gt; 2 flowpath_8895520 flowpath_8895396</span>
 <span class="co">#&gt; 3 flowpath_8895396       flowpath_0</span>
