@@ -8,8 +8,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 params:
   out_path: !r file.path(tempdir(check = TRUE), "hygeo")
-  split_m: 5000
-  collapse_m: 1000
+  split_m: 20000
+  collapse_m: 3000
   gage_tolerance: 5
 ---
 
@@ -157,24 +157,37 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
 
 nhd_crosswalk <- get_nhd_crosswalk(reconcile, catchment_prefix = catchment_prefix) 
 
+network_order <- dplyr::select(sf::st_drop_geometry(nhd$flowline), COMID, Hydroseq)
+
+outlet_comid <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(COMID)) %>%
+  left_join(network_order, by = c("outlet_COMID" = "COMID")) %>%
+  group_by(local_id) %>%
+  filter(Hydroseq == min(Hydroseq)) %>%
+  select(-Hydroseq, -COMID) %>% 
+  ungroup()
+
 nhd_crosswalk <- dplyr::left_join(nhd_crosswalk, 
                                   dplyr::select(sf::st_drop_geometry(nwis_sites), 
                                                 site_no, local_id) %>%
                                     dplyr::mutate(local_id = gsub(waterbody_prefix, catchment_prefix, local_id)), 
-                                  by = "local_id")
+                                  by = "local_id") %>%
+  dplyr::left_join(outlet_comid, by = "local_id")
 
-network_order <- dplyr::select(sf::st_drop_geometry(nhd$flowline), COMID, Hydroseq)
+nhd_crosswalk <- setNames(lapply(unique(nhd_crosswalk$local_id), function(x, df) {
+  
+  df_sub <- df[df$local_id == x, ]
+  
+  out <- list(COMID = df_sub$COMID)
+  
+  if(any(!is.na(df_sub$site_no))) {
+    out$site_no <- unique(df_sub$site_no[!is.na(df_sub$site_no)])
+  }
 
-nhd_crosswalk <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(COMID)) %>%
-  left_join(network_order, by = c("outlet_COMID" = "COMID")) %>%
-  group_by(local_id) %>%
-  filter(Hydroseq == min(Hydroseq)) %>%
-  select(-Hydroseq) %>% ungroup()
+  out$outlet_COMID <- unique(df_sub$outlet_COMID)  
+  
+  out
 
-nhd_crosswalk <- setNames(lapply(seq_len(nrow(nhd_crosswalk)), function(x, df) {
-  out <- setNames(as.list(df[x, 2:ncol(df)]), names(df)[2:ncol(df)])  
-  out[!is.na(out)]
-}, df = nhd_crosswalk), nhd_crosswalk$local_id)
+}, df = nhd_crosswalk), unique(nhd_crosswalk$local_id))
 
 ```
 ```{r, eval=FALSE, include=FALSE}
