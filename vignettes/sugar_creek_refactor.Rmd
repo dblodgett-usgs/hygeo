@@ -155,39 +155,15 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
                                                              fline_rec = reconcile,
                                                              para = 1)
 
-nhd_crosswalk <- get_nhd_crosswalk(reconcile, catchment_prefix = catchment_prefix) 
-
 network_order <- dplyr::select(sf::st_drop_geometry(nhd$flowline), COMID, Hydroseq)
 
-outlet_comid <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(COMID)) %>%
-  left_join(network_order, by = c("outlet_COMID" = "COMID")) %>%
-  group_by(local_id) %>%
-  filter(Hydroseq == min(Hydroseq)) %>%
-  select(-Hydroseq, -COMID) %>% 
-  ungroup()
+nwis_sites <- dplyr::select(sf::st_drop_geometry(nwis_sites),
+                            site_no, local_id) %>%
+  dplyr::mutate(local_id = gsub(waterbody_prefix, catchment_prefix, local_id))
 
-nhd_crosswalk <- dplyr::left_join(nhd_crosswalk, 
-                                  dplyr::select(sf::st_drop_geometry(nwis_sites), 
-                                                site_no, local_id) %>%
-                                    dplyr::mutate(local_id = gsub(waterbody_prefix, catchment_prefix, local_id)), 
-                                  by = "local_id") %>%
-  dplyr::left_join(outlet_comid, by = "local_id")
+nhd_crosswalk <- get_nhd_crosswalk(reconcile, catchment_prefix, network_order, nwis_sites) 
 
-nhd_crosswalk <- setNames(lapply(unique(nhd_crosswalk$local_id), function(x, df) {
-  
-  df_sub <- df[df$local_id == x, ]
-  
-  out <- list(COMID = df_sub$COMID)
-  
-  if(any(!is.na(df_sub$site_no))) {
-    out$site_no <- unique(df_sub$site_no[!is.na(df_sub$site_no)])
-  }
 
-  out$outlet_COMID <- unique(df_sub$outlet_COMID)  
-  
-  out
-
-}, df = nhd_crosswalk), unique(nhd_crosswalk$local_id))
 
 ```
 ```{r, eval=FALSE, include=FALSE}

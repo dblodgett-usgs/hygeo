@@ -44,3 +44,28 @@ test_that("get_hydrologic_location integration test", {
 
   expect_equal(names(hyl_out), c("NHDPlusID", "ID", "measure", "offset", "geom"))
 })
+
+test_that("test crosswalk", {
+    hl <- get_test_hygoeo_object()
+    fline <- hl$fline
+
+    get_nhd_crosswalk(fline, catchment_prefix = "cat-")
+
+    src_gpkg <- system.file("gpkg/sugar_creek_fort_mill.gpkg", package = "hygeo")
+
+    network_order <- read_sf(src_gpkg, "NHDFlowline_Network") %>%
+      st_drop_geometry() %>%
+      align_nhdplus_names() %>%
+      select(COMID, Hydroseq)
+
+    out <- get_nhd_crosswalk(fline, "cat-", network_order)
+
+    expect_true(is.list(out))
+
+    site <- data.frame(local_id = "cat-97", site_no = "test")
+
+    out <- get_nhd_crosswalk(fline, "cat-", network_order, site)
+
+    expect_equal(out[[97]]$site_no, "test")
+
+})

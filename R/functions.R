@@ -175,15 +175,60 @@ get_nexus_data <- function(nexus, catchment_edge_list) {
 #' Get NHD Crosswalk
 #' @param x sf data.frame output from reconcile_collapsed_flowlines() function
 #' @param catchment_prefix character prefix to be appended to local_id output.
+#' @param network_order data.frame COMID and Hydroseq attributes allowing
+#' upstream downstream sorting.
+#' @param sites data.frame local_id and site_no for sites that should be added
+#' to the output list. Only used if network_order is not NULL
+#' @return If network_order is supplied, a list format is returned, if
+#' network_order is NULL, a basic crosswalk table is returned.
 #' @export
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr unnest
-get_nhd_crosswalk <- function(x, catchment_prefix = "catchment_") {
-  st_drop_geometry(x) %>%
+get_nhd_crosswalk <- function(x, catchment_prefix = "catchment_",
+                              network_order = NULL, sites = data.frame(local_id = character(0),
+                                                                       site_no = character(0))) {
+
+  nhd_crosswalk <- st_drop_geometry(x) %>%
     select(.data$ID, .data$member_COMID) %>%
     mutate(member_COMID = strsplit(.data$member_COMID, ",")) %>%
     unnest(cols = c("member_COMID")) %>%
     mutate(local_id = paste0(catchment_prefix, .data$ID)) %>%
     select(.data$local_id, COMID = .data$member_COMID)
+
+  if(!is.null(network_order)) {
+    outlet_comid <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(COMID)) %>%
+      left_join(network_order, by = c("outlet_COMID" = "COMID")) %>%
+      group_by(local_id) %>%
+      filter(Hydroseq == min(Hydroseq)) %>%
+      select(-Hydroseq, -COMID) %>%
+      ungroup()
+
+    nhd_crosswalk <- dplyr::left_join(nhd_crosswalk,
+                                      outlet_comid,
+                                      by = "local_id")
+
+    nhd_crosswalk <- dplyr::left_join(nhd_crosswalk,
+                                      sites,
+                                      by = "local_id")
+
+    nhd_crosswalk <- setNames(lapply(unique(nhd_crosswalk$local_id), function(x, df) {
+
+      df_sub <- df[df$local_id == x, ]
+
+      out <- list(COMID = df_sub$COMID)
+
+      if(any(!is.na(df_sub$site_no))) {
+        out$site_no <- unique(df_sub$site_no[!is.na(df_sub$site_no)])
+      }
+
+      out$outlet_COMID <- unique(df_sub$outlet_COMID)
+
+      out
+
+    }, df = nhd_crosswalk), unique(nhd_crosswalk$local_id))
+
+  }
+
+  nhd_crosswalk
 }
