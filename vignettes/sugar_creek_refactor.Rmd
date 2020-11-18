@@ -157,13 +157,13 @@ reconcile_divides <- hyRefactor::reconcile_catchment_divides(nhd$catchment,
 
 network_order <- dplyr::select(sf::st_drop_geometry(nhd$flowline), COMID, Hydroseq)
 
-nwis_sites <- dplyr::select(sf::st_drop_geometry(nwis_sites),
+nwis_lookup <- dplyr::select(sf::st_drop_geometry(nwis_sites),
                             site_no, local_id) %>%
   dplyr::mutate(local_id = gsub(waterbody_prefix, catchment_prefix, local_id))
 
-nhd_crosswalk <- get_nhd_crosswalk(reconcile, catchment_prefix, network_order, nwis_sites) 
-
-
+nhd_crosswalk <- c(get_nhd_crosswalk(reconcile, catchment_prefix, network_order, nwis_lookup),
+                   get_nhd_crosswalk(reconcile, waterbody_prefix, network_order, nwis_lookup))
+                   
 
 ```
 ```{r, eval=FALSE, include=FALSE}
