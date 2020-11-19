@@ -69,6 +69,10 @@ nwis <- nhdplusTools::navigate_nldi(list(featureSource = "comid",
                                     data_source = "nwissite", 
                                     distance_km = 9999)
 
+if(is.list(nwis)) {
+  nwis <- nwis$UT_nwissite
+}
+
 what_nwis_data <- dataRetrieval::whatNWISdata(siteNumber = gsub("USGS-", "", nwis$identifier))
 
 nwis_sites <- filter(what_nwis_data, parm_cd == "00060" & data_type_cd == "uv") %>%
@@ -92,6 +96,8 @@ all(nwis_sites$COMID %in% nhd$catchment$FEATUREID)
 # only chose sites that are 1/4 or more up the catchment.
 split_sites <- nwis_sites %>%
   filter((100 * (REACH_meas - FromMeas) / (ToMeas - FromMeas)) > params$gage_tolerance)
+
+nwis_sites$split <- nwis_sites$site_no %in% split_sites$site_no
 
 nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
@@ -127,15 +133,31 @@ slope <- select(st_drop_geometry(reconcile), ID, member_COMID) %>%
 
 reconcile <- left_join(reconcile, slope, by = "ID")
 
+nwis_sites <- left_join(nwis_sites, 
+                        select(st_drop_geometry(collapse), event_REACHCODE, split_COMID = COMID),
+                        by = c("REACHCODE" = "event_REACHCODE"))
+
 nwis_sites$local_id <- 
-  sapply(as.character(nwis_sites$COMID), 
-         function(x) {
-           id <- reconcile[grepl(x, reconcile$member_COMID), ]
+  sapply(seq_len(nrow(nwis_sites)), 
+         function(x, nwis_sites) {
+           
+           if(!is.na(nwis_sites$split_COMID[x])) {
+             checker <- nwis_sites$split_COMID[x]
+           } else {
+             checker <- as.character(nwis_sites$COMID[x])
+           }
+           
+           id <- reconcile[grepl(checker, 
+                                 reconcile$member_COMID), ]
            if(nrow(id) > 1) {
              id <- filter(id, Hydroseq == min(Hydroseq))
            }
+           
            paste0(waterbody_prefix, id$ID)
-         })
+         }, nwis_sites = nwis_sites)
+
+
+nwis_sites <- select(nwis_sites, -split, -split_COMID)
 
 fdr <- raster::raster(fdr_tif)
 fac <- raster::raster(fac_tif)
