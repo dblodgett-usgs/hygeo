@@ -243,7 +243,17 @@ out_path <- params$out_path
 dir.create(out_path, recursive = TRUE, showWarnings = FALSE)
 
 out_path <- write_hygeo(hygeo_list, out_path = out_path, overwrite = TRUE)
-jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"), pretty = TRUE, auto_unbox = FALSE)
+
+nhd_crosswalk <- lapply(nhd_crosswalk, function(x) {
+  out <- list(COMID = x$COMID, outlet_COMID = jsonlite::unbox(x$outlet_COMID))
+  
+  if(!is.null(x$site_no)) {
+    out <- c(out, list(site_no = jsonlite::unbox(x$site_no)))
+  }
+  out
+})
+
+jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"), pretty = TRUE, auto_unbox = TRUE)
 
 (hygeo_list_read <- read_hygeo(out_path))
 
