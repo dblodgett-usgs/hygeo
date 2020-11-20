@@ -252,7 +252,8 @@ nhd_crosswalk <- lapply(nhd_crosswalk, function(x) {
   out
 })
 
-jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"), pretty = TRUE, auto_unbox = TRUE)
+jsonlite::write_json(nhd_crosswalk, file.path(out_path, "crosswalk.json"), 
+                     pretty = TRUE, auto_unbox = FALSE)
 
 (hygeo_list_read <- read_hygeo(out_path))
 
