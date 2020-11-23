@@ -3,7 +3,7 @@ title: "CAMELS with hygeo output"
 author: "dblodgett@usgs.gov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{camels_demo}
+  %\VignetteIndexEntry{CAMELS with hygeo output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

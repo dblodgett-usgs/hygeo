@@ -3,7 +3,7 @@ title: "NHDPlusHR with hygeo output"
 author: "dblodgett@usgs.gov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{nhdplushr_demo}
+  %\VignetteIndexEntry{NHDPlusHR with hygeo output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

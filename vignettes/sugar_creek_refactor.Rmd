@@ -3,7 +3,7 @@ title: "Application of hygeo with hyRefactor"
 author: "dblodgett@usgs.gov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{hyRefactor demo}
+  %\VignetteIndexEntry{Application of hygeo with hyRefactor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 params:
