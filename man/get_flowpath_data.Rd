@@ -13,7 +13,7 @@ get_flowpath_data(fline, catchment_edge_list, catchment_prefix = "catchment_")
 \item{catchment_edge_list}{data.frame edge list of connections
 to/from waterbodies}
 
-\item{flowpathy_prefix}{character prefix for flowpath IDs}
+\item{catchment_prefix}{character prefix for catchment IDs}
 }
 \description{
 get_flowpath_data

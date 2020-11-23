@@ -140,7 +140,7 @@ get_catchment_data <- function(catchment, catchment_edge_list,
 #' @param fline sf data.frame NHDPlus Flowlines or hyRefactor output.
 #' @param catchment_edge_list data.frame edge list of connections
 #' to/from waterbodies
-#' @param flowpathy_prefix character prefix for flowpath IDs
+#' @inheritParams get_catchment_data
 #' @importFrom dplyr select mutate left_join
 #' @export
 get_flowpath_data <- function(fline, catchment_edge_list,
@@ -197,11 +197,11 @@ get_nhd_crosswalk <- function(x, catchment_prefix = "catchment_",
     select(.data$local_id, COMID = .data$member_COMID)
 
   if(!is.null(network_order)) {
-    outlet_comid <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(COMID)) %>%
+    outlet_comid <- dplyr::mutate(nhd_crosswalk, outlet_COMID = as.integer(.data$COMID)) %>%
       left_join(network_order, by = c("outlet_COMID" = "COMID")) %>%
-      group_by(local_id) %>%
-      filter(Hydroseq == min(Hydroseq)) %>%
-      select(-Hydroseq, -COMID) %>%
+      group_by(.data$local_id) %>%
+      filter(.data$Hydroseq == min(.data$Hydroseq)) %>%
+      select(-.data$Hydroseq, -.data$COMID) %>%
       ungroup()
 
     nhd_crosswalk <- dplyr::left_join(nhd_crosswalk,
@@ -212,7 +212,9 @@ get_nhd_crosswalk <- function(x, catchment_prefix = "catchment_",
                                       sites,
                                       by = "local_id")
 
-    nhd_crosswalk <- setNames(lapply(unique(nhd_crosswalk$local_id), function(x, df) {
+    new_names <- unique(nhd_crosswalk$local_id)
+
+    nhd_crosswalk <- lapply(unique(nhd_crosswalk$local_id), function(x, df) {
 
       df_sub <- df[df$local_id == x, ]
 
@@ -226,7 +228,9 @@ get_nhd_crosswalk <- function(x, catchment_prefix = "catchment_",
 
       out
 
-    }, df = nhd_crosswalk), unique(nhd_crosswalk$local_id))
+    }, df = nhd_crosswalk)
+
+    names(nhd_crosswalk) <- new_names
 
   }
 

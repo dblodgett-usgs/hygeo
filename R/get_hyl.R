@@ -42,7 +42,7 @@ link_by_path <- function(lp, hyl, flowpath, radius = 1000) {
   indexes <- left_join(data.frame(id = seq_len(nrow(hyl))),
                        nhdplusTools::get_flowline_index(flowpath, hyl, search_radius = radius),
                        by = "id")
-  indexes <- select(indexes, -id)
+  indexes <- select(indexes, -.data$id)
 
   st_sf(bind_cols(hyl[, 1],
                   indexes))
