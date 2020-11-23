@@ -10,11 +10,12 @@ vignette: >
   
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-collapse = TRUE,
-comment = "#>",
-fig.width=6,
-fig.height=4,
-eval=nzchar(Sys.getenv("BUILD_VIGNETTES"))
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6,
+  fig.height=4,
+  eval=nzchar(Sys.getenv("BUILD_VIGNETTES")),
+  cache = FALSE
 )
 oldoption <- options(scipen = 9999)
 options(scipen = 9999)
