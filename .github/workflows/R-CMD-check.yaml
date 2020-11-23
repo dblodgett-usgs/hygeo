@@ -70,7 +70,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
-        run: rcmdcheck::rcmdcheck(build_args = c("--no-build-vignettes"), error_on = "error", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--ignore-vignettes"), build_args = c("--no-build-vignettes"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
