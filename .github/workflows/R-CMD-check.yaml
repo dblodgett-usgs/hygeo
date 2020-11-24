@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - master
   pull_request:
     branches:
       - master
@@ -83,6 +85,5 @@ jobs:
           path: check
 
       - name: Test coverage
-        if: failure()
         run: covr::coveralls()
         shell: Rscript {0}

@@ -1,6 +1,6 @@
 # hygeo
 
-[![Build Status](https://travis-ci.org/dblodgett-usgs/hygeo.svg?branch=master)](https://travis-ci.org/dblodgett-usgs/hygeo) [![Coverage Status](https://coveralls.io/repos/github/dblodgett-usgs/hygeo/badge.svg?branch=master)](https://coveralls.io/github/dblodgett-usgs/hygeo?branch=master)
+![R-CMD-check](https://github.com/dblodgett-usgs/hygeo/workflows/R-CMD-check/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/dblodgett-usgs/hygeo/badge.svg?branch=master)](https://coveralls.io/github/dblodgett-usgs/hygeo?branch=master)
 
 installation: `remotes::install_github("dblodgett-usgs/hygeo")`
 
