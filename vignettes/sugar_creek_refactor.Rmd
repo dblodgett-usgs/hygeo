@@ -27,7 +27,7 @@ options("rgdal_show_exportToProj4_warnings"="none")
 ```
 
 Source dependencies and set up a bunch of files.
-```{r, eval=TRUE}
+```{r}
 library(nhdplusTools)
 library(hyRefactor)
 library(sf)
@@ -52,7 +52,7 @@ nexus_prefix <- "nex-"
 ```
 
 Now we will get some data and just plot up our area of interest.
-```{r, eval=TRUE}
+```{r}
 options("rgdal_show_exportToProj4_warnings"="none")
 nhd <- nhdplusTools::plot_nhdplus(list(9731454),
                                   gpkg = src_gpkg,
@@ -61,7 +61,7 @@ nhd <- nhdplusTools::plot_nhdplus(list(9731454),
 ```
 
 For this demonstration we'll just use NWIS Sites as they exist. Here we go grab upstream with tributaries NWIS Sites and index them to the network. This is all placeholder for doing this using a more formal process for selection of network locations. 
-```{r, eval=TRUE}
+```{r}
 nwis <- nhdplusTools::navigate_nldi(list(featureSource = "comid", 
                                          featureID = 9731454),
                                     mode = "UT", 
@@ -106,7 +106,7 @@ nhdplusTools::plot_nhdplus(list(9731454),
 plot(st_transform(nwis_sites$geometry, 3857), pch = 24, bg = "darkgrey", add = TRUE)
 ```
 
-```{r, eval=TRUE}
+```{r}
 hyRefactor::refactor_nhdplus(nhd$flowline,
                              split_flines_meters = params$split_m,
                              split_flines_cores = 2,
@@ -193,7 +193,7 @@ write_sf(reconcile_divides, "../tests/testthat/data/sugar_creek_hyRefactor.gpkg"
 ```
 
 We can now pass reconciled divides into the hygeo package functions to generate catchment areas, waterbodies, and nexuses.
-```{r, eval=TRUE, cache=FALSE}
+```{r, cache=FALSE}
 nexus <- get_nexus(reconcile, 
                    nexus_prefix = nexus_prefix)
 
@@ -228,7 +228,7 @@ mapview::mapview(catchment_data, layer.name = "Catchment Area", col.regions = "t
 ```
 
 The outputs can be rendered into csv or json:
-```{r output, eval=TRUE}
+```{r output}
 
 hygeo_list <- list(catchment = catchment_data, 
                    flowpath = flowpath_data, 
@@ -261,7 +261,7 @@ nhd_crosswalk
 ```
 
 If needed, we can further break up the flowline network ensuring the outlets in the catchment network are included.
-```{r, eval=TRUE}
+```{r}
 outlet_comids <- select(st_drop_geometry(reconcile), ID, member_COMID) %>%
   mutate(member_COMID = strsplit(member_COMID, ",")) %>%
   unnest(cols = member_COMID) %>%

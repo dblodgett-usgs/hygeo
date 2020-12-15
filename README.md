@@ -19,6 +19,8 @@ Any catchment node of degree 2 is a typical catchment that may have a coincident
 
 Using this graph scheme, headwater catchments contribute either to the upstream end of a flowpath or to the shore of a waterbody that breaks up the coverage of catchments.
 
+In the relatively common case where one waterbody is modeled per catchment, the waterbody edge list and catchment edge list are identical and there is one flowpath per waterbody. This is not a requirement of the data model but is a common hydrologic-model implementation scheme.
+
 **Data**  
 Two topology edge lists describing the graphs.
 

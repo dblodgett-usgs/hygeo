@@ -89,6 +89,6 @@ mapview::mapview(fline, lwd = 4, color = "blue", layer.name = "NHDPlusV2") +
 
 ```
 
-```{r teardown, include=FALSE, eval=TRUE}
+```{r teardown, include=FALSE}
 options(oldoption)
 ```

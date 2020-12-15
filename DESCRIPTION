@@ -1,7 +1,7 @@
 Package: hygeo
 Type: Package
 Title: Hydrologic Geospatial Fabric Creation Functions
-Version: 0.5.2
+Version: 0.5.6
 Authors@R: c(person(given = "David", 
                     family = "Blodgett", 
                     role = c("aut", "cre"), 
