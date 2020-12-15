@@ -4,7 +4,8 @@
 #' @param out_path character path to store outputs
 #' @param edge_list_format character 'json' or 'csv'
 #' @param data_format character 'geojson' or 'gpkg'
-#' @param overwrite boolean overwrite output or not
+#' @param edge_map logical write edge map json file"
+#' @param overwrite logical overwrite output or not
 #' @importFrom utils write.csv
 #' @importFrom sf write_sf st_make_valid st_transform
 #' @export
@@ -12,6 +13,7 @@ write_hygeo <- function(hygeo_list,
                         out_path,
                         edge_list_format = "json",
                         data_format = "geojson",
+                        edge_map = FALSE,
                         overwrite = FALSE) {
 
   check_hygeo(hygeo_list)
@@ -24,7 +26,7 @@ write_hygeo <- function(hygeo_list,
     wfe <- file.path(out_path, "waterbody_edge_list.json")
   } else if(edge_list_format == "gpkg") {
     stop('edge_list_format "gpkg" not implemented yet')
-  } else {
+  } else if (!is.null(edge_list_format)) {
     stop("edge_list_format must be 'csv', 'gpkg', or 'json'")
   }
 
@@ -40,14 +42,23 @@ write_hygeo <- function(hygeo_list,
     stop("data_format must be 'gejson' or 'gpkg'")
   }
 
+  if(edge_map) {
+    cem <- file.path(out_path, "catchment_edge_map.json")
+    wem <- file.path(out_path, "waterbody_edge_map.json")
+  }
+
   if(overwrite) {
     if(file.exists(cfe)) unlink(cfe)
     if(file.exists(wfe)) unlink(wfe)
     if(file.exists(cf)) unlink(cf)
     if(file.exists(wf)) unlink(wf)
     if(file.exists(nf)) unlink(nf)
+    if(edge_map) {
+      if(file.exists(cem)) unlink(cem)
+      if(file.exists(wem)) unlink(wem)
+    }
   } else {
-    if(any(file.exists(cfe), file.exists(wfe))) {
+    if(any(file.exists(cfe), file.exists(cf))) {
       stop("overwrite is FALSE and files exist")
     }
   }
@@ -85,6 +96,23 @@ write_hygeo <- function(hygeo_list,
     write_sf(st_make_valid(hygeo_list$catchment), cf, "catchment")
     write_sf(st_make_valid(hygeo_list$flowpath), wf, "flowpath")
     write_sf(st_make_valid(hygeo_list$nexus), nf, "nexus")
+  }
+
+  if(edge_map) {
+
+    make_edge_map <- function(x) {
+      # out <- sapply(x$toid, function(x) list(list(toid = x)),
+      #               USE.NAMES = FALSE)
+      # names(out) <- x$id
+
+      out <- as.list(x$toid)
+      names(out) <- x$id
+    }
+
+    jsonlite::write_json(make_edge_map(hygeo_list$catchment_edges),
+                         cem, pretty = TRUE, auto_unbox = TRUE)
+    jsonlite::write_json(make_edge_map(hygeo_list$waterbody_edges),
+                         wem, pretty = TRUE, auto_unbox = TRUE)
   }
 
   return(invisible(out_path))

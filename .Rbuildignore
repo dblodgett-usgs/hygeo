@@ -10,3 +10,5 @@ docs
 .*rosm.cache
 build
 .github
+Dockerfile
+docker-compose.yml

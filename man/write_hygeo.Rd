@@ -9,6 +9,7 @@ write_hygeo(
   out_path,
   edge_list_format = "json",
   data_format = "geojson",
+  edge_map = FALSE,
   overwrite = FALSE
 )
 }
@@ -22,7 +23,9 @@ catchment, flowpath, nexus, catchment_edges, and waterbody_edges.}
 
 \item{data_format}{character 'geojson' or 'gpkg'}
 
-\item{overwrite}{boolean overwrite output or not}
+\item{edge_map}{logical write edge map json file"}
+
+\item{overwrite}{logical overwrite output or not}
 }
 \description{
 Write hygeo

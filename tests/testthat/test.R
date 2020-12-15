@@ -126,3 +126,15 @@ test_that("io errors", {
                            overwrite = TRUE),
                "hygeo_list must contain all of catchment, flowpath, nexus, catchment_edges, waterbody_edges")
 })
+
+
+test_that("edge map", {
+  temp_path <- get_hygeo_temp()
+
+  temp_path_2 <- write_hygeo(hygeo_list, out_path = temp_path, edge_map = TRUE,
+                             overwrite = TRUE)
+
+  expect_true(file.exists(file.path(temp_path, "catchment_edge_map.json")))
+
+  expect_true(file.exists(file.path(temp_path, "waterbody_edge_map.json")))
+})
