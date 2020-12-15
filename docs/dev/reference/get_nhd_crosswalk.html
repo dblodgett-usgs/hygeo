@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hygeo</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.6</span>
       </span>
     </div>
 
@@ -138,12 +138,12 @@
     <p>Get NHD Crosswalk</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_nhd_crosswalk</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>catchment_prefix</span> <span class='kw'>=</span> <span class='st'>"catchment_"</span>,
-  <span class='kw'>network_order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sites</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>local_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>site_no</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))
-)</pre>
+    <pre class="usage"><span class='fu'>get_nhd_crosswalk</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  catchment_prefix <span class='op'>=</span> <span class='st'>"catchment_"</span>,
+  network_order <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sites <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>local_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, site_no <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,7 +188,7 @@ network_order is NULL, a basic crosswalk table is returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

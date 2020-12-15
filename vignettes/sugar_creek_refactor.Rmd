@@ -241,7 +241,7 @@ class(hygeo_list) <- "hygeo"
 out_path <- params$out_path
 dir.create(out_path, recursive = TRUE, showWarnings = FALSE)
 
-out_path <- write_hygeo(hygeo_list, out_path = out_path, overwrite = TRUE)
+out_path <- write_hygeo(hygeo_list, out_path = out_path, edge_map = TRUE, overwrite = TRUE)
 
 nhd_crosswalk <- lapply(nhd_crosswalk, function(x) {
   out <- list(COMID = x$COMID, outlet_COMID = jsonlite::unbox(x$outlet_COMID))
